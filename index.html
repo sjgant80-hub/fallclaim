@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>◊ FallClaim · sovereign case management + UK quantum engine for claims firms</title>
+<meta name="description" content="Sovereign single-file case management for UK claims firms (PI/RTA/EL/PL/clinical neg/housing/financial mis-selling). JC Guideline quantum, Civil Liability Act 2018 whiplash tariff, Ogden multipliers, pre-action protocol trackers, Part 36 register, limitation calculator. Research aid, not legal advice.">
+<meta name="prime" content="811">
+<meta name="version" content="1.0.0">
+<meta name="theme-color" content="#0b0a0f">
+<link rel="manifest" href='data:application/manifest+json,{"name":"FallClaim","short_name":"fallclaim","start_url":"./","display":"standalone","background_color":"%230b0a0f","theme_color":"%23b8974a","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27><rect width=%27192%27 height=%27192%27 fill=%27%230b0a0f%27 rx=%2828%27/><text x=%2796%27 y=%27138%27 font-family=%27Georgia, serif%27 font-size=%27124%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23b8974a%27>◊</text></svg>","sizes":"192x192","type":"image/svg+xml"}]}'>
+<style>
+:root{
+  --void:#0b0a0f;--void-2:#13121a;--ink:#1a1922;--ink-2:#22212c;
+  --line:#2a2934;--line-soft:#1f1e28;
+  --cream:#e6e1d6;--cream-dim:#a8a395;--cream-muted:#6e6a5e;
+  --brass:#b8974a;--amber:#ff8c00;--ox:#8b1a1a;
+  --green:#4ade80;--red:#ef4444;--blue:#60a5fa;--yellow:#fbbf24;
+  --serif:Georgia,'Libre Baskerville',ui-serif,serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mono:'IBM Plex Mono','SF Mono',ui-monospace,Menlo,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--void);color:var(--cream);font:14px/1.55 var(--sans);min-height:100dvh;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;background:transparent;border:none;color:inherit}
+input,textarea,select{font-family:inherit;background:var(--ink);border:1px solid var(--line);color:var(--cream);border-radius:3px;padding:7px 10px;outline:none;font-size:13px}
+input:focus,textarea:focus,select:focus{border-color:var(--brass)}
+input[type=number],input[type=date]{font-family:var(--mono)}
+a{color:var(--brass)}a:hover{color:var(--amber)}
+.app{min-height:100dvh;display:grid;grid-template-rows:48px 1fr}
+header{display:flex;align-items:center;border-bottom:1px solid var(--line);background:var(--void-2);user-select:none}
+.brand{display:flex;align-items:center;gap:10px;padding:0 16px;height:100%;border-right:1px solid var(--line)}
+.brand .mark{width:28px;height:28px;background:linear-gradient(135deg,var(--brass),var(--amber));border-radius:5px;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:16px;color:var(--void)}
+.brand .name{font-family:var(--serif);font-weight:600;font-size:14px;letter-spacing:0.02em}
+.brand .seal{font-family:var(--mono);font-size:9px;color:var(--cream-muted);letter-spacing:0.18em;text-transform:uppercase}
+.case-pill{display:flex;align-items:center;gap:8px;padding:0 14px;height:100%;border-right:1px solid var(--line);cursor:pointer;font-size:12px;color:var(--cream-dim)}
+.case-pill:hover{background:var(--ink);color:var(--cream)}
+.case-pill .who{font-family:var(--serif);font-size:13px;color:var(--brass)}
+.case-pill .meta{font-family:var(--mono);font-size:9px;color:var(--cream-muted);letter-spacing:0.1em;text-transform:uppercase}
+nav.tabs{display:flex;flex:1;overflow-x:auto;align-items:stretch}
+nav.tabs button{padding:0 14px;font-size:12px;color:var(--cream-dim);letter-spacing:0.04em;display:flex;align-items:center;gap:6px;border-right:1px solid var(--line-soft);height:100%;white-space:nowrap;border-top:2px solid transparent}
+nav.tabs button:hover{background:var(--ink);color:var(--cream)}
+nav.tabs button.active{background:var(--ink);color:var(--brass);border-top-color:var(--brass)}
+.tools-r{display:flex;align-items:center;gap:5px;padding:0 14px;height:100%;border-left:1px solid var(--line)}
+.tool-btn{padding:5px 11px;border-radius:3px;font-size:11px;color:var(--cream-dim);letter-spacing:0.06em;text-transform:uppercase;font-family:var(--mono);border:1px solid var(--line)}
+.tool-btn:hover{background:var(--ink);color:var(--cream);border-color:var(--brass)}
+.tool-btn.primary{background:var(--brass);color:var(--void);border-color:var(--brass);font-weight:600}
+.tool-btn.primary:hover{background:var(--amber);border-color:var(--amber)}
+.layout{display:grid;grid-template-columns:320px 1fr;min-height:calc(100dvh - 48px)}
+aside.sidebar{background:var(--void-2);border-right:1px solid var(--line);overflow-y:auto;padding:14px 12px 60px;display:flex;flex-direction:column;gap:10px}
+.sidebar h4{font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;padding:0 4px}
+.sidebar-search{display:flex;flex-direction:column;gap:6px}
+.sidebar-search input,.sidebar-search select{font-size:12px;padding:6px 8px}
+.chips{display:flex;flex-wrap:wrap;gap:3px;margin:4px 0}
+.chip{padding:2px 7px;border-radius:9px;font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--line);color:var(--cream-muted);cursor:pointer}
+.chip:hover{border-color:var(--brass);color:var(--brass)}
+.chip.on{background:var(--brass);color:var(--void);border-color:var(--brass)}
+.case-list{display:flex;flex-direction:column;gap:3px}
+.case-card{padding:9px 11px;border-radius:3px;cursor:pointer;border:1px solid transparent;border-left:3px solid var(--line);background:var(--ink);transition:all 0.1s}
+.case-card:hover{background:var(--ink-2);border-left-color:var(--brass)}
+.case-card.active{background:var(--ink-2);border-left-color:var(--brass);border-color:var(--line)}
+.case-card.lim-red{border-left-color:var(--red)}
+.case-card.lim-amber{border-left-color:var(--amber)}
+.case-card.lim-black{border-left-color:var(--ox);background:rgba(139,26,26,0.2)}
+.case-card .nm{font-family:var(--serif);font-size:13px;color:var(--cream);font-weight:600}
+.case-card .ref{font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:0.06em}
+.case-card .sub{font-family:var(--mono);font-size:10px;color:var(--cream-muted);letter-spacing:0.06em;margin-top:2px;display:flex;gap:4px;flex-wrap:wrap}
+.case-card .sub .tag{padding:1px 5px;border-radius:2px;background:var(--void);color:var(--cream-dim);font-size:9px}
+.case-card .sub .tag.red{background:var(--ox);color:var(--cream)}
+.case-card .sub .tag.amber{background:#3a2a08;color:var(--amber)}
+.case-card .val{font-family:var(--mono);font-size:11px;color:var(--green);margin-top:3px}
+.empty-state{padding:18px;text-align:center;color:var(--cream-muted);font-size:12px;font-style:italic}
+main{padding:18px 22px 60px;overflow-y:auto;max-width:1240px;margin:0 auto;width:100%}
+.disclaimer{background:rgba(139,26,26,0.15);border:1px solid var(--ox);border-left:3px solid var(--ox);border-radius:3px;padding:12px 16px;margin-bottom:18px;font-size:12px;color:var(--cream)}
+.disclaimer strong{color:var(--brass)}
+.section-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;gap:14px;flex-wrap:wrap}
+.section-h h2{font-family:var(--serif);font-size:18px;font-weight:600;letter-spacing:0.01em}
+.section-h .sub{font-family:var(--mono);font-size:11px;color:var(--cream-muted);letter-spacing:0.08em;text-transform:uppercase}
+.section-h .actions{display:flex;gap:6px;flex-wrap:wrap}
+.subtabs{display:flex;gap:2px;margin-bottom:14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.subtabs button{padding:8px 14px;font-size:12px;color:var(--cream-dim);letter-spacing:0.04em;border-bottom:2px solid transparent;margin-bottom:-1px}
+.subtabs button:hover{color:var(--cream)}
+.subtabs button.active{color:var(--brass);border-bottom-color:var(--brass)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--void-2);border:1px solid var(--line);border-radius:4px;padding:16px 18px}
+.card h3{font-family:var(--serif);font-size:14px;font-weight:600;margin-bottom:10px;color:var(--cream);letter-spacing:0.01em}
+.card h3 .meta{font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:0.1em;margin-left:8px}
+.kpi{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px dashed var(--line-soft);font-size:13px}
+.kpi:last-child{border-bottom:none}
+.kpi .l{color:var(--cream-dim)}
+.kpi .v{font-family:var(--mono);color:var(--cream);font-weight:500}
+.kpi .v.green{color:var(--green)}.kpi .v.red{color:var(--red)}.kpi .v.amber{color:var(--amber)}.kpi .v.brass{color:var(--brass)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.row.r3{grid-template-columns:1fr 1fr 1fr}
+.row.r4{grid-template-columns:1fr 1fr 1fr 1fr}
+.field label{display:block;font-family:var(--mono);font-size:10px;color:var(--cream-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:3px}
+.field input,.field select,.field textarea{width:100%}
+.field .hint{font-size:10px;color:var(--cream-muted);margin-top:3px;font-family:var(--mono)}
+.btn{padding:7px 14px;border:1px solid var(--brass);border-radius:3px;font-size:12px;color:var(--cream);background:transparent;letter-spacing:0.04em}
+.btn:hover{border-color:var(--amber);color:var(--amber)}
+.btn.primary{background:var(--brass);color:var(--void);border-color:var(--brass);font-weight:600}
+.btn.primary:hover{background:var(--amber);border-color:var(--amber);color:var(--void)}
+.btn.danger{border-color:var(--ox);color:var(--ox)}
+.btn.danger:hover{border-color:var(--red);color:var(--red);background:rgba(239,68,68,0.08)}
+.btn.sm{padding:4px 9px;font-size:11px}
+.btn.ghost{border-color:var(--line);color:var(--cream-dim)}
+.btn.ghost:hover{border-color:var(--brass);color:var(--brass)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left}
+th{color:var(--brass);font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600}
+td.r{text-align:right;font-family:var(--mono)}
+tr.total td{font-weight:600;border-top:1px solid var(--brass);border-bottom:none;padding-top:10px}
+tr.total td.r{color:var(--brass)}
+.tag{display:inline-block;padding:2px 7px;border-radius:11px;font-family:var(--mono);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--brass);color:var(--brass);margin-right:4px}
+.tag.amber{border-color:var(--amber);color:var(--amber)}
+.tag.green{border-color:var(--green);color:var(--green)}
+.tag.red{border-color:var(--red);color:var(--red)}
+.tag.blue{border-color:var(--blue);color:var(--blue)}
+.tag.dim{border-color:var(--line);color:var(--cream-muted)}
+.bracket-row{display:grid;grid-template-columns:1fr 0.8fr 1fr 100px;gap:6px;padding:6px 0;border-bottom:1px dashed var(--line-soft);align-items:center;font-size:12px}
+.bracket-row.head{font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:0.08em;text-transform:uppercase}
+.bracket-row .nm{font-weight:500}
+.bracket-row .rng{font-family:var(--mono);color:var(--cream-dim)}
+.special-row{display:grid;grid-template-columns:1.2fr 1fr 1.4fr 32px;gap:6px;padding:5px 0;border-bottom:1px dashed var(--line-soft);align-items:center}
+.special-row.head{font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.special-row input,.special-row select{padding:5px 7px;font-size:12px;width:100%}
+.special-row .x{cursor:pointer;color:var(--cream-muted);font-family:var(--mono);text-align:center}
+.special-row .x:hover{color:var(--red)}
+.part36-row{display:grid;grid-template-columns:0.6fr 1fr 1fr 1fr 0.8fr 32px;gap:6px;padding:5px 0;border-bottom:1px dashed var(--line-soft);align-items:center}
+.part36-row.head{font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.part36-row input,.part36-row select{padding:5px 7px;font-size:12px;width:100%}
+.def-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 32px;gap:6px;padding:5px 0;border-bottom:1px dashed var(--line-soft);align-items:center}
+.def-row.head{font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.def-row input{padding:5px 7px;font-size:12px;width:100%}
+.timeline-evt{padding:8px 12px;background:var(--ink);border-left:2px solid var(--brass);margin-bottom:5px;border-radius:0 3px 3px 0}
+.timeline-evt .ts{font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:0.06em}
+.timeline-evt .kind{font-family:var(--mono);font-size:10px;color:var(--cream-muted);text-transform:uppercase;margin-left:6px}
+.timeline-evt .nt{font-size:12px;color:var(--cream-dim);margin-top:3px}
+.protocol-step{padding:10px 14px;background:var(--ink);border-left:3px solid var(--line);margin-bottom:6px;border-radius:0 3px 3px 0}
+.protocol-step.done{border-left-color:var(--green);opacity:0.65}
+.protocol-step.active{border-left-color:var(--amber);background:var(--ink-2)}
+.protocol-step.overdue{border-left-color:var(--red);background:rgba(139,26,26,0.12)}
+.protocol-step .nm{font-family:var(--serif);font-size:13px;color:var(--cream);font-weight:600}
+.protocol-step .due{font-family:var(--mono);font-size:10px;color:var(--cream-muted);letter-spacing:0.06em;margin-top:3px}
+.protocol-step .due.amber{color:var(--amber)}.protocol-step .due.red{color:var(--red)}.protocol-step .due.green{color:var(--green)}
+.palette-bg,.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:flex-start;justify-content:center;padding-top:14vh;z-index:900;backdrop-filter:blur(4px)}
+.palette-bg.open,.modal-bg.open{display:flex}
+.modal-bg{align-items:center;padding:18px}
+.palette{background:var(--void-2);border:1px solid var(--brass);border-radius:5px;width:min(680px,92%);box-shadow:0 18px 50px rgba(0,0,0,0.7);overflow:hidden}
+.palette-hd{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.palette-hd .glyph{font-family:var(--serif);font-size:18px;color:var(--brass)}
+.palette-hd input{flex:1;border:none;background:transparent;font-size:15px;padding:4px}
+.palette-bd{max-height:55vh;overflow:auto;padding:8px}
+.palette-row{padding:9px 12px;border-radius:3px;cursor:pointer;font-size:13px}
+.palette-row:hover{background:var(--ink)}
+.palette-row .q{color:var(--brass);font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase}
+.palette-row .a{color:var(--cream-dim);font-size:12px;margin-top:3px}
+.modal{background:var(--void-2);border:1px solid var(--brass);border-radius:4px;padding:22px;max-width:680px;width:100%;max-height:90vh;overflow:auto}
+.modal h2{font-family:var(--serif);font-size:17px;margin-bottom:14px}
+.modal .actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--brass);color:var(--void);padding:9px 18px;border-radius:3px;font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;opacity:0;transition:all 0.22s;z-index:1100;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.onboard{max-width:620px;margin:5vh auto;padding:36px 32px;background:var(--void-2);border:1px solid var(--brass);border-radius:6px}
+.onboard h1{font-family:var(--serif);font-size:28px;color:var(--brass);margin-bottom:6px}
+.onboard .lead{color:var(--cream-dim);margin-bottom:20px;font-size:13px}
+.onboard .step{font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px}
+.drawer-toggle{display:none;padding:0 12px;height:100%;align-items:center;border-right:1px solid var(--line);cursor:pointer;color:var(--brass);font-size:18px}
+@media (max-width:880px){
+  .drawer-toggle{display:flex}
+  .layout{grid-template-columns:1fr}
+  aside.sidebar{position:fixed;top:48px;left:-340px;bottom:0;width:320px;z-index:50;transition:left 0.2s;box-shadow:0 0 30px rgba(0,0,0,0.6)}
+  aside.sidebar.open{left:0}
+  nav.tabs button{padding:0 10px;font-size:11px}
+  main{padding:14px 14px 50px}
+  .row,.row.r3,.row.r4{grid-template-columns:1fr}
+  .brand .seal{display:none}
+  .case-pill{display:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <button class="drawer-toggle" onclick="toggleDrawer()" title="cases">&#9776;</button>
+  <div class="brand">
+    <div class="mark">&#9674;</div>
+    <div>
+      <div class="name">FallClaim</div>
+      <div class="seal">v1 &middot; prime 811 &middot; claims</div>
+    </div>
+  </div>
+  <div class="case-pill" id="casePill" onclick="showView('cases')" title="active case">
+    <span class="who" id="cpWho">&mdash; no case &mdash;</span>
+    <span class="meta" id="cpMeta"></span>
+  </div>
+  <nav class="tabs" id="tabNav"></nav>
+  <div class="tools-r">
+    <button class="tool-btn primary" onclick="openPalette()" title="ask &middot; Ctrl+K">&#9674; ask</button>
+    <button class="tool-btn" id="tierBadge" onclick="openModal('settings')">T0</button>
+    <button class="tool-btn" onclick="openModal('settings')">&#9881;</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-search">
+    <h4>cases <span id="caseCount" style="float:right;color:var(--cream-muted);font-weight:normal"></span></h4>
+    <input type="text" id="caseFilter" placeholder="search ref &middot; claimant &middot; defendant" oninput="renderSidebar()">
+    <div class="row" style="gap:4px;margin:0">
+      <select id="caseFilterType" onchange="renderSidebar()" style="font-size:11px">
+        <option value="">all types</option>
+        <option value="rta">RTA</option><option value="el">EL</option><option value="pl">PL</option>
+        <option value="clinical-neg">clinical neg</option><option value="housing-disrepair">housing</option>
+        <option value="financial-misselling">mis-selling</option><option value="data-breach">data breach</option>
+        <option value="trip">trip/slip</option><option value="other">other</option>
+      </select>
+      <select id="caseFilterStatus" onchange="renderSidebar()" style="font-size:11px">
+        <option value="">all status</option>
+        <option value="intake">intake</option><option value="active">active</option>
+        <option value="settled">settled</option><option value="discontinued">discontinued</option>
+        <option value="won">won</option><option value="lost">lost</option>
+      </select>
+    </div>
+    <div class="row" style="gap:4px;margin:0">
+      <select id="caseFilterHandler" onchange="renderSidebar()" style="font-size:11px"></select>
+      <select id="caseFilterUrgency" onchange="renderSidebar()" style="font-size:11px">
+        <option value="">all limitation</option>
+        <option value="overdue">overdue</option>
+        <option value="30">&le; 30 days</option>
+        <option value="90">&le; 90 days</option>
+        <option value="part36">part 36 active</option>
+      </select>
+    </div>
+    <button class="btn sm primary" onclick="newCase()" style="width:100%;margin-top:4px">+ new case</button>
+  </div>
+  <div class="case-list" id="caseList"></div>
+</aside>
+<main id="view"></main>
+</div>
+</div>
+<div class="palette-bg" id="palette">
+  <div class="palette">
+    <div class="palette-hd">
+      <span class="glyph">&#9674;</span>
+      <input type="text" id="pInput" placeholder="ask &middot; 'PI limitation? &middot; whiplash 9mo &middot; Part 36 consequences &middot; date of knowledge'">
+      <span id="pTier" style="font-family:var(--mono);font-size:10px;color:var(--cream-muted)">T0</span>
+    </div>
+    <div class="palette-bd" id="pBody"></div>
+  </div>
+</div>
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <h2 id="modalTitle">&middot;</h2>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast">&middot;</div>
+<script>
+'use strict';
+const TOOLNAME='fallclaim';const VERSION='1.0.0';const PRIME=811;const STORE='fallclaim';const CONFIG_V='fallclaim@'+VERSION;
+const DISCLAIMER='FallClaim is a tool for UK claims firms (CMC and solicitor practices). It assists with case management, fee tracking, regulated document generation, and FCA CMR / SRA compliance. It is not court filing software; pleadings and submissions remain the firm’s responsibility. Sovereign — client data never leaves the device unless exported.';
+const CASE_TYPES=[
+  {k:'rta',n:'RTA',protocol:'rta-portal',limYrs:3},
+  {k:'el',n:'Employer Liability',protocol:'el-pl-portal',limYrs:3},
+  {k:'pl',n:'Public Liability',protocol:'el-pl-portal',limYrs:3},
+  {k:'clinical-neg',n:'Clinical negligence',protocol:'pre-action-clinical-neg',limYrs:3},
+  {k:'housing-disrepair',n:'Housing disrepair',protocol:'housing-disrepair',limYrs:6},
+  {k:'financial-misselling',n:'Financial mis-selling',protocol:'none',limYrs:6},
+  {k:'data-breach',n:'Data breach',protocol:'pre-action-pi',limYrs:6},
+  {k:'trip',n:'Trip / slip',protocol:'pre-action-pi',limYrs:3},
+  {k:'other',n:'Other PI',protocol:'pre-action-pi',limYrs:3}
+];
+const PROTOCOLS={
+  'rta-portal':{name:'MOJ RTA Portal',steps:[
+    {k:'cnf',n:'Submit CNF (Claim Notification Form)',dueDays:0},
+    {k:'ack',n:'Insurer electronic acknowledgement',dueDays:1},
+    {k:'liab',n:'Liability response (15 working days)',dueDays:21},
+    {k:'med',n:'Obtain fixed-cost medical report',dueDays:60},
+    {k:'stage2',n:'Settlement Pack (Stage 2)',dueDays:90},
+    {k:'stage3',n:'Court Stage 3 (if no settlement)',dueDays:120}
+  ]},
+  'el-pl-portal':{name:'MOJ EL/PL Portal',steps:[
+    {k:'cnf',n:'Submit CNF',dueDays:0},
+    {k:'ack',n:'Acknowledge receipt',dueDays:1},
+    {k:'liab-el',n:'EL liability response (30 days)',dueDays:30},
+    {k:'liab-pl',n:'PL liability response (40 days)',dueDays:40},
+    {k:'med',n:'Medical evidence',dueDays:75},
+    {k:'stage2',n:'Settlement Pack (Stage 2)',dueDays:120},
+    {k:'stage3',n:'Court Stage 3',dueDays:150}
+  ]},
+  'pre-action-pi':{name:'Pre-Action PI Protocol',steps:[
+    {k:'loc',n:'Send Letter of Claim',dueDays:0},
+    {k:'ack',n:'Defendant acknowledgement (21 days)',dueDays:21},
+    {k:'response',n:'Substantive response (3 months)',dueDays:90},
+    {k:'expert',n:'Joint expert / disclosure',dueDays:120},
+    {k:'negotiate',n:'Negotiate / Part 36',dueDays:180},
+    {k:'issue',n:'Issue proceedings (if needed)',dueDays:240}
+  ]},
+  'pre-action-clinical-neg':{name:'Pre-Action Clinical Negligence',steps:[
+    {k:'lon',n:'Letter of Notification',dueDays:0},
+    {k:'records',n:'Obtain medical records (40 days)',dueDays:40},
+    {k:'loc',n:'Letter of Claim with expert opinion',dueDays:120},
+    {k:'response',n:'Defendant response (4 months)',dueDays:240},
+    {k:'meeting',n:'Settlement meeting / ADR',dueDays:300},
+    {k:'issue',n:'Issue proceedings',dueDays:360}
+  ]},
+  'housing-disrepair':{name:'Housing Conditions Protocol',steps:[
+    {k:'eed',n:'Early notification / Early Disclosure',dueDays:0},
+    {k:'loc',n:'Letter of Claim (incl. expert)',dueDays:21},
+    {k:'response',n:'Landlord response (20 working days)',dueDays:50},
+    {k:'inspect',n:'Joint inspection / single joint expert',dueDays:80},
+    {k:'settle',n:'Negotiate works + damages',dueDays:120}
+  ]},
+  'none':{name:'No formal protocol',steps:[
+    {k:'instruct',n:'Take instructions',dueDays:0},
+    {k:'investigate',n:'Investigate / gather evidence',dueDays:30},
+    {k:'complaint',n:'File complaint (firm 8wk + FOS)',dueDays:60},
+    {k:'resolve',n:'Resolve / escalate',dueDays:240}
+  ]}
+};
+const WHIPLASH={n:'Civil Liability Act 2018 Whiplash Tariff',cite:'CLA 2018 s.3 & Whiplash Injury Regs 2021',bands:[
+  {dur:'≤ 3 months',psla:240,combined:260},
+  {dur:'≤ 6 months',psla:495,combined:520},
+  {dur:'≤ 9 months',psla:840,combined:895},
+  {dur:'≤ 12 months',psla:1320,combined:1390},
+  {dur:'≤ 15 months',psla:2040,combined:2125},
+  {dur:'≤ 18 months',psla:3005,combined:3100},
+  {dur:'≤ 24 months',psla:4215,combined:4345}
+]};
+const JC_BRACKETS=[
+  {part:'head/brain',sev:'very-severe',n:'Very severe brain damage (quadriplegic/PVS)',lo:344150,hi:493000},
+  {part:'head/brain',sev:'moderately-severe',n:'Moderately severe brain injury',lo:267340,hi:344150},
+  {part:'head/brain',sev:'moderate',n:'Moderate brain damage',lo:52550,hi:267340},
+  {part:'head/brain',sev:'less-severe',n:'Less severe brain damage',lo:18700,hi:52550},
+  {part:'head/brain',sev:'minor',n:'Minor head injury (recovery within weeks)',lo:2690,hi:15580},
+  {part:'head/brain',sev:'psych-post-traumatic',n:'Post-traumatic epilepsy',lo:11080,hi:165700},
+  {part:'neck',sev:'severe',n:'Severe neck injury (incomplete paraplegia)',lo:55500,hi:181020},
+  {part:'neck',sev:'moderate-i',n:'Moderate (I) neck - chronic, severe disability',lo:30500,hi:46970},
+  {part:'neck',sev:'moderate-ii',n:'Moderate (II) neck - exacerbation, vulnerability',lo:16770,hi:30500},
+  {part:'neck',sev:'minor',n:'Minor neck (non-tariff, >2yr)',lo:4660,hi:8430},
+  {part:'back',sev:'severe-i',n:'Severe (I) back - cord damage, paraplegia risk',lo:103930,hi:188500},
+  {part:'back',sev:'severe-ii',n:'Severe (II) back - nerve root damage',lo:85470,hi:103930},
+  {part:'back',sev:'severe-iii',n:'Severe (III) back - disc lesions, fractures',lo:47320,hi:85000},
+  {part:'back',sev:'moderate-i',n:'Moderate (I) back - vertebral compression',lo:30910,hi:44830},
+  {part:'back',sev:'moderate-ii',n:'Moderate (II) back - exacerbation of pre-existing',lo:14070,hi:30910},
+  {part:'back',sev:'minor',n:'Minor back (full recovery within 5yr)',lo:2890,hi:14070},
+  {part:'shoulder',sev:'severe',n:'Severe shoulder (brachial plexus damage)',lo:23430,hi:58610},
+  {part:'shoulder',sev:'serious',n:'Serious shoulder (dislocation, ongoing)',lo:15580,hi:23430},
+  {part:'shoulder',sev:'moderate',n:'Moderate shoulder (frozen, recovery <2yr)',lo:9630,hi:15580},
+  {part:'shoulder',sev:'minor',n:'Minor shoulder (recovery <2yr)',lo:2890,hi:9630},
+  {part:'arm',sev:'amputation',n:'Loss of both arms',lo:293850,hi:366100},
+  {part:'arm',sev:'severe',n:'Severe arm injury (function gone)',lo:117360,hi:179770},
+  {part:'arm',sev:'serious',n:'Serious arm (substantial permanent disability)',lo:47810,hi:73050},
+  {part:'arm',sev:'less-severe',n:'Less severe arm (substantial recovery)',lo:23430,hi:47810},
+  {part:'arm',sev:'simple-fracture',n:'Simple forearm fracture',lo:7830,hi:22730},
+  {part:'hand',sev:'amputation-both',n:'Total/effective loss of both hands',lo:171680,hi:245900},
+  {part:'hand',sev:'serious',n:'Serious hand (50% function)',lo:34480,hi:73710},
+  {part:'hand',sev:'moderate',n:'Moderate hand (crush, soft tissue)',lo:6260,hi:13740},
+  {part:'hand',sev:'minor',n:'Minor hand / finger laceration',lo:1140,hi:5260},
+  {part:'leg',sev:'amputation-both',n:'Loss of both legs',lo:293850,hi:344150},
+  {part:'leg',sev:'amputation-one',n:'Loss of one leg (above knee)',lo:127930,hi:167760},
+  {part:'leg',sev:'severe-very',n:'Very severe leg (degloving, multiple fractures)',lo:117360,hi:165860},
+  {part:'leg',sev:'serious',n:'Serious leg (lengthy treatment)',lo:47810,hi:73050},
+  {part:'leg',sev:'moderate',n:'Moderate leg (complex/multiple fractures)',lo:33880,hi:47810},
+  {part:'leg',sev:'less-serious',n:'Less serious leg (incomplete recovery)',lo:21920,hi:33880},
+  {part:'foot',sev:'amputation-both',n:'Amputation of both feet',lo:206730,hi:245900},
+  {part:'foot',sev:'severe',n:'Severe foot (permanent pain, mobility loss)',lo:47810,hi:73050},
+  {part:'foot',sev:'serious',n:'Serious foot (continuing pain)',lo:30500,hi:47810},
+  {part:'foot',sev:'moderate',n:'Moderate foot (displaced fractures)',lo:16770,hi:30500},
+  {part:'foot',sev:'modest',n:'Modest foot (simple fracture / sprain)',lo:9220,hi:16770},
+  {part:'eye',sev:'total-blindness-deafness',n:'Total blindness and deafness',lo:493000,hi:493000},
+  {part:'eye',sev:'total-blindness',n:'Total blindness',lo:329330,hi:329330},
+  {part:'eye',sev:'loss-one',n:'Loss of one eye',lo:66920,hi:80210},
+  {part:'eye',sev:'complete-loss-sight-one',n:'Complete loss of sight in one eye',lo:54830,hi:60850},
+  {part:'eye',sev:'serious',n:'Serious but incomplete loss of vision',lo:26190,hi:43560},
+  {part:'eye',sev:'minor',n:'Minor eye injury / temporary',lo:2200,hi:8270},
+  {part:'hearing',sev:'total-bilateral',n:'Total deafness',lo:117360,hi:142060},
+  {part:'hearing',sev:'total-one',n:'Total loss of hearing in one ear',lo:37170,hi:54080},
+  {part:'hearing',sev:'partial',n:'Partial hearing loss / tinnitus',lo:7830,hi:48480},
+  {part:'hearing',sev:'mild-tinnitus',n:'Mild tinnitus / occasional NIHL',lo:7780,hi:15580},
+  {part:'internal',sev:'lung-disease',n:'Severe lung disease (younger sufferers)',lo:106490,hi:144870},
+  {part:'internal',sev:'asbestos',n:'Mesothelioma',lo:69100,hi:124390},
+  {part:'internal',sev:'bowel',n:'Severe bowel damage (loss of function)',lo:46500,hi:73050},
+  {part:'internal',sev:'kidney',n:'Loss of one kidney (other intact)',lo:34480,hi:50550},
+  {part:'internal',sev:'spleen',n:'Loss of spleen',lo:23410,hi:29570},
+  {part:'internal',sev:'reproductive-male',n:'Total impotence (male, young)',lo:50890,hi:93940},
+  {part:'internal',sev:'reproductive-female',n:'Infertility (female, young)',lo:127100,hi:188390},
+  {part:'psychiatric',sev:'severe',n:'Severe general psychiatric damage',lo:60410,hi:127750},
+  {part:'psychiatric',sev:'moderately-severe',n:'Moderately severe psychiatric',lo:21000,hi:60410},
+  {part:'psychiatric',sev:'moderate',n:'Moderate psychiatric (marked improvement)',lo:6450,hi:21000},
+  {part:'psychiatric',sev:'less-severe',n:'Less severe psychiatric',lo:1670,hi:6320},
+  {part:'psychiatric',sev:'ptsd-severe',n:'Severe PTSD',lo:73050,hi:122850},
+  {part:'psychiatric',sev:'ptsd-moderately',n:'Moderately severe PTSD',lo:28250,hi:73050},
+  {part:'psychiatric',sev:'ptsd-moderate',n:'Moderate PTSD',lo:9980,hi:28250},
+  {part:'psychiatric',sev:'ptsd-less',n:'Less severe PTSD',lo:4820,hi:9980},
+  {part:'face',sev:'severe-scarring-female',n:'Very severe facial scarring (female)',lo:32370,hi:130930},
+  {part:'face',sev:'severe-scarring-male',n:'Very severe facial scarring (male)',lo:30700,hi:106940},
+  {part:'face',sev:'fractures-multiple',n:'Multiple facial fractures',lo:18370,hi:29550},
+  {part:'face',sev:'fracture-nose-recovered',n:'Fracture of nose (full recovery)',lo:1840,hi:8050},
+  {part:'pelvis',sev:'severe',n:'Severe pelvis/hip (extensive fractures)',lo:90100,hi:150220},
+  {part:'pelvis',sev:'serious',n:'Serious pelvis (long-term disability)',lo:30030,hi:90100},
+  {part:'pelvis',sev:'moderate',n:'Moderate pelvis (no major permanent)',lo:14070,hi:30030},
+  {part:'pelvis',sev:'minor',n:'Minor pelvis (full recovery)',lo:4860,hi:14070}
+];
+const OGDEN={discountRate:-0.0025,note:'Ogden 8th ed -0.25% discount rate (England & Wales). For multipliers consult current tables.',
+  multipliersLossEarnings:{
+    20:{m:42.5,n:'Term to age 68 (M)'},25:{m:39.2,n:'Term to age 68 (M)'},
+    30:{m:35.9,n:'Term to age 68 (M)'},35:{m:32.5,n:'Term to age 68 (M)'},
+    40:{m:29.1,n:'Term to age 68 (M)'},45:{m:25.5,n:'Term to age 68 (M)'},
+    50:{m:21.8,n:'Term to age 68 (M)'},55:{m:18.0,n:'Term to age 68 (M)'},
+    60:{m:13.9,n:'Term to age 68 (M)'},65:{m:9.4,n:'Term to age 68 (M)'}
+  },
+  multipliersLifetime:{
+    20:{m:67.4,n:'Whole life (M)'},25:{m:62.0,n:'Whole life (M)'},
+    30:{m:56.7,n:'Whole life (M)'},35:{m:51.5,n:'Whole life (M)'},
+    40:{m:46.4,n:'Whole life (M)'},45:{m:41.5,n:'Whole life (M)'},
+    50:{m:36.7,n:'Whole life (M)'},55:{m:32.0,n:'Whole life (M)'},
+    60:{m:27.5,n:'Whole life (M)'},65:{m:23.2,n:'Whole life (M)'},
+    70:{m:19.2,n:'Whole life (M)'},75:{m:15.4,n:'Whole life (M)'},
+    80:{m:12.0,n:'Whole life (M)'}
+  }
+};
+const SPECIAL_CATEGORIES=[
+  {k:'medical-expenses',n:'Medical expenses'},
+  {k:'lost-earnings',n:'Past lost earnings'},
+  {k:'future-earnings',n:'Future lost earnings (Ogden)'},
+  {k:'travel',n:'Travel / transport'},
+  {k:'care',n:'Care & assistance'},
+  {k:'future-care',n:'Future care (Ogden)'},
+  {k:'aids-equipment',n:'Aids & equipment'},
+  {k:'damaged-property',n:'Damaged property'},
+  {k:'home-adaptations',n:'Home adaptations'},
+  {k:'other',n:'Other'}
+];
+const STATUTORY_INTEREST=0.08;
+const T0_RULES=[
+  {q:'pi limitation',a:'PI claims: 3 years from incident or date of knowledge (Limitation Act 1980 s.11). Court has discretion under s.33 to disapply where equitable.'},
+  {q:'date of knowledge',a:'Date when claimant first knew (a) injury was significant, (b) attributable to defendant’s act/omission, (c) identity of defendant. See s.14 Limitation Act 1980.'},
+  {q:'civil liability act 2018',a:'Fixes whiplash PSLA tariff for RTAs with injuries lasting ≤ 2 years. Bands range from £240 (≤3mo) to £4,215 (≤24mo). Higher tariff if minor psych injury also.'},
+  {q:'whiplash tariff',a:'CLA 2018 tariff: 3mo £240 / 6mo £495 / 9mo £840 / 12mo £1,320 / 15mo £2,040 / 18mo £3,005 / 24mo £4,215. Combined (with psych) slightly higher.'},
+  {q:'moj portal',a:'RTA portal: PI £1,000–£25,000. EL/PL portal: £1,000–£25,000. Fixed recoverable costs apply. 3-stage process (CNF → settlement pack → court).'},
+  {q:'jc guidelines',a:'Judicial College Guidelines, 17th edition (2024). Refreshed every ~3 years. Used by courts to assess PSLA general damages. Always verify against current edition.'},
+  {q:'ogden tables',a:'Government Actuary’s tables for calculating future loss (earnings, care, services). Multiplier × multiplicand = lump sum. Current discount rate −0.25% (E&W).'},
+  {q:'contributory negligence',a:'Law Reform (Contributory Negligence) Act 1945 s.1 — damages reduced by claimant’s share of fault. Common splits: 25% seat-belt, 15% no helmet, 20% drunk passenger.'},
+  {q:'part 36',a:'CPR 36 settlement offer. If claimant beats own offer at trial: enhanced interest up to 10% over base, costs on indemnity basis, 10% damages uplift. If claimant fails to beat defendant’s offer: pays defendant’s costs from expiry.'},
+  {q:'letter of claim',a:'Pre-action PI: defendant has 21 days to acknowledge, 3 months to investigate and respond substantively. Clinical neg: 4 months. Housing disrepair: 20 working days.'},
+  {q:'bolitho test',a:'Bolitho v City & Hackney HA [1998] AC 232. Bolam test (responsible body of medical opinion) qualified — court must be satisfied the body of opinion has a logical basis. Defence must withstand logical analysis.'},
+  {q:'quantum interest',a:'Statutory interest on PSLA at 2% from service of proceedings (Wright v BRB). Special damages: 8% (or half special account rate) from date of loss to trial. Judgments Act 1838.'},
+  {q:'strike out',a:'CPR 3.4: court may strike out where no reasonable grounds, abuse of process, or non-compliance. Summary judgment CPR 24: no real prospect of success and no other compelling reason for trial.'},
+  {q:'stay',a:'CPR 26.4 stay for ADR — 1 month standard, extendable. Court actively encourages ADR; refusing without good reason has costs consequences (Halsey v Milton Keynes).'},
+  {q:'adr mediation',a:'Court expects parties to consider ADR. Unreasonable refusal can lead to adverse costs. Mediation through mediator (CEDR, Trust Mediation, etc.) typically 1-day. Joint settlement meetings common in clin neg.'},
+  {q:'cfa success fee',a:'Post-LASPO (April 2013): success fee not recoverable from defendant. Capped at 25% of general damages + past losses (not future). Client pays from damages.'},
+  {q:'dba',a:'Damages Based Agreement — contingency fee. Capped 50% damages (25% in PI court cases, 35% in employment). DBA Regs 2013. Recent reform proposals (Mulheron) widely awaited.'},
+  {q:'ate insurance',a:'After-the-Event insurance for adverse costs + disbursements. Premiums no longer recoverable from defendant (LASPO). Exception: clinical negligence expert report premium.'},
+  {q:'fixed costs',a:'Extended FRC regime (Oct 2023) applies to most claims up to £100,000 + simple claims up to £25,000. Bands by complexity (Bands 1-4). Mesothelioma and clinical neg excluded.'},
+  {q:'fca cmr',a:'FCA Claims Management Regulation since April 2019. Replaced MoJ CMR. Cooling-off 14 days. Fee disclosure required. Complaints handling → FOS. Auth ref: FCA Register.'},
+  {q:'cooling off',a:'CMR firms: 14-day cooling-off period from agreement signing. Client may cancel without charge unless work was requested to start immediately (and they waived in writing).'},
+  {q:'fos',a:'Financial Ombudsman Service handles complaints against FCA-regulated firms (including CMCs since 2019). 6-month limit to refer after final response. Decisions binding on firm if accepted.'},
+  {q:'small claims',a:'Now £1,500 PSLA threshold for RTA (was £1,000) post Whiplash Reforms. £500 general small claims limit raised to £10,000 for non-PI / non-housing claims.'},
+  {q:'fast track',a:'Claims £25,000–£50,000 (since FRC extension, mostly intermediate track). 1 day trial limit. Fixed costs by band/stage.'},
+  {q:'multi track',a:'Over £50,000 or complex matters. Active case management, costs budgeting (Precedent H), full disclosure.'},
+  {q:'qualified one way',a:'QOCS — claimant in PI claim normally protected from paying defendant’s costs unless: fundamentally dishonest, claim struck out, Part 36 offer rule applies. Set-off against own damages.'},
+  {q:'fundamental dishonesty',a:'CPR 44.16 / s.57 Criminal Justice and Courts Act 2015 — claim dismissed in entirety if claimant fundamentally dishonest in material respect. Loses QOCS protection.'},
+  {q:'rehabilitation code',a:'2015 Rehabilitation Code — encourages early defendant-funded rehab assessment in PI/clin neg. Without prejudice. Treatment costs recoverable if liability admitted.'}
+];
+let db,FIRM=null,ADVISERS=[],CLIENTS=[],CASES=[],AUDIT=[],SETTINGS={tier:'T0',anthropicKey:'',openaiKey:''},NEXTHASH='0';
+let activeCase=null,activeSubTab='overview',activeView='cases',mesh=null,boot=false;
+const $=(s,r=document)=>r.querySelector(s);const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const uuid=()=>(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2));
+const now=()=>Date.now();
+const fmt$=n=>'£'+(Number(n)||0).toLocaleString('en-GB',{maximumFractionDigits:0});
+const fmtDate=ts=>!ts?'—':new Date(typeof ts==='string'?ts:ts).toLocaleDateString('en-GB');
+const daysBetween=(a,b)=>Math.floor((b-a)/86400000);
+const toDateInput=ts=>!ts?'':new Date(ts).toISOString().slice(0,10);
+function sha256(s){const e=new TextEncoder().encode(s);return crypto.subtle.digest('SHA-256',e).then(b=>{const a=[...new Uint8Array(b)];return a.map(x=>x.toString(16).padStart(2,'0')).join('')})}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+function openDB(){return new Promise((resolve,reject)=>{const r=indexedDB.open(STORE,1);
+  r.onupgradeneeded=e=>{const d=e.target.result;
+    ['firms','advisers','clients','cases','valuationCorpus','audit','settings'].forEach(s=>{if(!d.objectStoreNames.contains(s))d.createObjectStore(s,{keyPath:'id'})});
+  };
+  r.onsuccess=e=>{db=e.target.result;resolve()};r.onerror=reject;
+})}
+function txAll(store){return new Promise((res,rej)=>{const t=db.transaction(store,'readonly').objectStore(store).getAll();t.onsuccess=()=>res(t.result);t.onerror=rej})}
+function txPut(store,rec){return new Promise((res,rej)=>{const t=db.transaction(store,'readwrite').objectStore(store).put(rec);t.onsuccess=()=>res(rec);t.onerror=rej})}
+function txDel(store,id){return new Promise((res,rej)=>{const t=db.transaction(store,'readwrite').objectStore(store).delete(id);t.onsuccess=res;t.onerror=rej})}
+async function loadAll(){const[f,a,c,cs,au,st]=await Promise.all([txAll('firms'),txAll('advisers'),txAll('clients'),txAll('cases'),txAll('audit'),txAll('settings')]);
+  FIRM=f[0]||null;ADVISERS=a;CLIENTS=c;CASES=cs;AUDIT=au.sort((x,y)=>x.i-y.i);
+  const s=st.find(x=>x.id==='_main');if(s){SETTINGS={...SETTINGS,...s}}
+  if(AUDIT.length)NEXTHASH=AUDIT[AUDIT.length-1].docHash||'0';
+}
+async function audit(action,reasoning,payload){
+  const i=AUDIT.length+1;const ts=now();const prev=NEXTHASH;
+  const body={i,ts,tool:TOOLNAME,adviserId:(payload&&payload.adviserId)||'',clientId:(payload&&payload.clientId)||'',caseId:(payload&&payload.caseId)||'',action,reasoning,configVersion:CONFIG_V,prevHash:prev,payload};
+  const docHash=await sha256(JSON.stringify(body));body.docHash=docHash;body.id='au_'+i;
+  NEXTHASH=docHash;AUDIT.push(body);await txPut('audit',body);
+}
+function broadcast(type,payload){if(!mesh)return;try{mesh.postMessage({v:1,type,ts:now(),source:TOOLNAME,payload})}catch(e){}}
+function meshHandle(msg){if(!msg||!msg.data||msg.data.source===TOOLNAME)return;const m=msg.data;
+  if(m.type==='sync.request'){broadcast('sync.snapshot',{firm:FIRM,advisers:ADVISERS,clients:CLIENTS,cases:CASES});return}
+  if(m.type==='sync.snapshot'&&m.payload){mergeSnapshot(m.payload);return}
+  if(m.type==='client.created'||m.type==='client.updated'){mergeRec('clients',CLIENTS,m.payload);return}
+  if(m.type==='adviser.created'||m.type==='adviser.updated'){mergeRec('advisers',ADVISERS,m.payload);return}
+  if(m.type==='firm.updated'&&m.payload){FIRM=m.payload;txPut('firms',FIRM);renderAll();return}
+  if(m.type==='case.created'||m.type==='case.updated'){mergeRec('cases',CASES,m.payload);return}
+}
+function mergeRec(store,arr,rec){if(!rec||!rec.id)return;const i=arr.findIndex(x=>x.id===rec.id);
+  if(i<0){arr.push(rec)}else if((arr[i].updatedAt||0)<(rec.updatedAt||0)){arr[i]=rec}
+  txPut(store,rec);renderAll();}
+function mergeSnapshot(p){if(p.firm&&(!FIRM||(FIRM.updatedAt||0)<(p.firm.updatedAt||0))){FIRM=p.firm;txPut('firms',FIRM)}
+  (p.advisers||[]).forEach(r=>mergeRec('advisers',ADVISERS,r));
+  (p.clients||[]).forEach(r=>mergeRec('clients',CLIENTS,r));
+  (p.cases||[]).forEach(r=>mergeRec('cases',CASES,r));}
+function meshInit(){try{mesh=new BroadcastChannel('fall-claim');mesh.onmessage=meshHandle;
+  const sig=new BroadcastChannel('fall-signal');sig.onmessage=()=>{};
+  setTimeout(()=>broadcast('sync.request',{}),200);
+}catch(e){console.warn('mesh disabled',e)}}
+function newCaseRec(){const id='cs_'+uuid();const t=now();const ref='C-'+new Date().getFullYear()+'-'+String(CASES.length+1).padStart(4,'0');
+  return{id,firmId:FIRM?FIRM.id:'',clientId:'',ts:t,updatedAt:t,closedAt:null,ref,type:'rta',
+    claimantName:'',defendantName:'',incidentDate:'',incidentLocation:'',description:'',
+    responsibleHandlerId:ADVISERS[0]?ADVISERS[0].id:'',supervisingPartnerId:ADVISERS[0]?ADVISERS[0].id:'',
+    liability:{admitted:false,contributoryPct:0,splitNotes:'',defendantsIdentified:[]},
+    valuation:{specialDamages:[],generalDamages:{injuryBand:'',lower:0,upper:0,assessment:0},
+      whiplashBand:'',ogdenEntries:[],interest:0,contributoryDeduction:0,totalEstimate:0},
+    protocol:'pre-action-pi',portalRef:'',protocolStarted:null,protocolSteps:{},
+    letterOfClaimSentAt:null,responseDeadline:null,defendantResponseAt:null,
+    part36Offers:[],limitationDate:null,dateOfKnowledge:null,
+    feeArrangement:'cfa',cfaSuccessFeePct:100,cfaCappedDamagesPct:25,dbaPct:50,ateInsurer:'',atePremium:0,
+    status:'intake',outcome:'',settlementAmount:0,settledAt:null,paymentReceivedAt:null,
+    timeline:[],nextStepDue:null,filedDocuments:[],feeRecords:[]};
+}
+function newClientRec(){const id='cl_'+uuid();const t=now();
+  return{id,firmId:FIRM?FIRM.id:'',createdAt:t,updatedAt:t,archivedAt:null,
+    title:'',firstName:'',lastName:'',preferredName:'',dob:'',email:'',phone:'',
+    address:{line1:'',city:'',postcode:'',country:'GB'},
+    cooling:{offDate:new Date(t+14*86400000).toISOString().slice(0,10),waived:false},
+    complaintsNoticeIssuedAt:null,referralSource:'direct',referralFee:0,
+    adviserId:ADVISERS[0]?ADVISERS[0].id:'',notes:[]};
+}
+function calcLimitation(caseRec){
+  const ct=CASE_TYPES.find(x=>x.k===caseRec.type)||CASE_TYPES[0];
+  const base=caseRec.dateOfKnowledge||caseRec.incidentDate;
+  if(!base)return null;
+  const d=new Date(base);d.setFullYear(d.getFullYear()+ct.limYrs);
+  return d.toISOString().slice(0,10);
+}
+function caseUrgency(c){
+  if(!c.limitationDate)return{cls:'',label:'no limit',days:null};
+  const days=daysBetween(now(),new Date(c.limitationDate).getTime());
+  if(days<0)return{cls:'lim-black',label:'OVERDUE',days};
+  if(days<=30)return{cls:'lim-red',label:days+'d',days};
+  if(days<=90)return{cls:'lim-amber',label:days+'d',days};
+  return{cls:'',label:days+'d',days};
+}
+function calcQuantum(c){
+  const v=c.valuation;let specials=0,interest=0;
+  v.specialDamages.forEach(s=>{specials+=Number(s.amount)||0});
+  v.ogdenEntries.forEach(o=>{specials+=(Number(o.multiplicand)||0)*(Number(o.multiplier)||0)});
+  if(c.incidentDate){const yrs=Math.max(0,(now()-new Date(c.incidentDate).getTime())/(365*86400000));
+    const pastSpecials=v.specialDamages.filter(s=>!s.future).reduce((a,b)=>a+(Number(b.amount)||0),0);
+    interest=pastSpecials*STATUTORY_INTEREST*yrs/2;
+  }
+  let gen=Number(v.generalDamages.assessment)||0;
+  if(v.whiplashBand){const b=WHIPLASH.bands.find(x=>x.dur===v.whiplashBand);if(b)gen=Math.max(gen,b.combined)}
+  const gross=gen+specials+interest;
+  const contrib=Number(v.contributoryDeduction||c.liability.contributoryPct)||0;
+  const net=gross*(1-contrib/100);
+  return{generals:gen,specials,interest,gross,contrib,net};
+}
+function renderAll(){renderTabs();renderSidebar();renderView()}
+function renderTabs(){
+  const t=$('#tabNav');
+  const items=[
+    {k:'cases',n:'Cases'},
+    {k:'case',n:activeCase?'Case: '+activeCase.ref:'Case',hide:!activeCase},
+    {k:'corpus',n:'JC Corpus'},
+    {k:'advisers',n:'Advisers'},
+    {k:'audit',n:'Audit'}
+  ];
+  t.innerHTML=items.filter(i=>!i.hide).map(i=>`<button class="${activeView===i.k?'active':''}" onclick="showView('${i.k}')">${i.n}</button>`).join('');
+  $('#tierBadge').textContent=SETTINGS.tier||'T0';
+  $('#pTier').textContent=SETTINGS.tier||'T0';
+  if(activeCase){$('#cpWho').textContent=activeCase.ref+' · '+(activeCase.claimantName||'(no claimant)');
+    const ct=CASE_TYPES.find(x=>x.k===activeCase.type);const u=caseUrgency(activeCase);
+    $('#cpMeta').textContent=(ct?ct.n:'')+' · lim '+u.label;
+  }else{$('#cpWho').textContent='— no case —';$('#cpMeta').textContent=''}
+}
+function showView(k){activeView=k;if(k==='case'&&!activeCase&&CASES.length){activeCase=CASES[0]}renderAll()}
+function selectCase(id){activeCase=CASES.find(c=>c.id===id)||null;activeView='case';activeSubTab='overview';renderAll()}
+function toggleDrawer(){$('#sidebar').classList.toggle('open')}
+function renderSidebar(){
+  const list=$('#caseList');
+  const handlerSel=$('#caseFilterHandler');
+  if(handlerSel){const cur=handlerSel.value;
+    handlerSel.innerHTML='<option value="">all handlers</option>'+ADVISERS.map(a=>`<option value="${a.id}" ${cur===a.id?'selected':''}>${a.name}</option>`).join('')}
+  const q=($('#caseFilter')?.value||'').toLowerCase();
+  const ft=$('#caseFilterType')?.value||'';
+  const fs=$('#caseFilterStatus')?.value||'';
+  const fh=$('#caseFilterHandler')?.value||'';
+  const fu=$('#caseFilterUrgency')?.value||'';
+  let cs=CASES.filter(c=>{
+    if(q&&!(c.ref+' '+c.claimantName+' '+c.defendantName).toLowerCase().includes(q))return false;
+    if(ft&&c.type!==ft)return false;
+    if(fs&&c.status!==fs)return false;
+    if(fh&&c.responsibleHandlerId!==fh)return false;
+    if(fu==='overdue'){const u=caseUrgency(c);if(u.days===null||u.days>=0)return false}
+    if(fu==='30'){const u=caseUrgency(c);if(u.days===null||u.days<0||u.days>30)return false}
+    if(fu==='90'){const u=caseUrgency(c);if(u.days===null||u.days<0||u.days>90)return false}
+    if(fu==='part36'&&!c.part36Offers.some(o=>!o.accepted&&!o.rejected&&!o.withdrawn))return false;
+    return true;
+  });
+  cs.sort((a,b)=>{const ua=caseUrgency(a).days,ub=caseUrgency(b).days;
+    if(ua===null&&ub===null)return b.updatedAt-a.updatedAt;
+    if(ua===null)return 1;if(ub===null)return -1;return ua-ub});
+  $('#caseCount').textContent='('+cs.length+')';
+  if(!cs.length){list.innerHTML='<div class="empty-state">no cases yet · click <strong>+ new case</strong></div>';return}
+  list.innerHTML=cs.map(c=>{
+    const u=caseUrgency(c);const ct=CASE_TYPES.find(x=>x.k===c.type);
+    const q=calcQuantum(c);
+    const limTag=u.days===null?'':u.days<0?`<span class="tag red">overdue</span>`:u.days<=30?`<span class="tag red">${u.days}d</span>`:u.days<=90?`<span class="tag amber">${u.days}d</span>`:`<span class="tag">${u.days}d</span>`;
+    return `<div class="case-card ${activeCase&&activeCase.id===c.id?'active':''} ${u.cls}" onclick="selectCase('${c.id}')">
+      <div class="ref">${c.ref}</div>
+      <div class="nm">${c.claimantName||'(no claimant)'} <span style="color:var(--cream-muted);font-weight:400">v ${c.defendantName||'—'}</span></div>
+      <div class="sub"><span class="tag dim">${ct?ct.n:c.type}</span><span class="tag dim">${c.status}</span>${limTag}</div>
+      ${q.net>0?`<div class="val">${fmt$(q.net)}</div>`:''}
+    </div>`;
+  }).join('');
+}
+function renderView(){
+  const v=$('#view');
+  if(!FIRM){return renderOnboard()}
+  if(activeView==='cases')return renderCasesIndex(v);
+  if(activeView==='case')return renderCaseDetail(v);
+  if(activeView==='corpus')return renderCorpus(v);
+  if(activeView==='advisers')return renderAdvisers(v);
+  if(activeView==='audit')return renderAudit(v);
+}
+function renderCasesIndex(v){
+  const tot=CASES.reduce((a,c)=>a+calcQuantum(c).net,0);
+  const overdue=CASES.filter(c=>{const u=caseUrgency(c);return u.days!==null&&u.days<0}).length;
+  const r30=CASES.filter(c=>{const u=caseUrgency(c);return u.days!==null&&u.days>=0&&u.days<=30}).length;
+  const r90=CASES.filter(c=>{const u=caseUrgency(c);return u.days!==null&&u.days>=0&&u.days<=90}).length;
+  const settled=CASES.filter(c=>c.status==='settled').length;
+  const settledVal=CASES.filter(c=>c.status==='settled').reduce((a,c)=>a+(Number(c.settlementAmount)||0),0);
+  v.innerHTML=`
+    <div class="disclaimer"><strong>FallClaim v${VERSION}</strong> &middot; ${DISCLAIMER}</div>
+    <div class="section-h">
+      <div><h2>Caseload</h2><div class="sub">${FIRM.name||'firm'} &middot; ${CASES.length} cases &middot; ${ADVISERS.length} adviser(s)</div></div>
+      <div class="actions">
+        <button class="btn ghost sm" onclick="exportJSON()">export JSON</button>
+        <button class="btn ghost sm" onclick="$('#impFile').click()">import JSON</button>
+        <input type="file" id="impFile" style="display:none" accept=".json" onchange="importJSON(event)">
+        <button class="btn primary" onclick="newCase()">+ new case</button>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Estimated value</h3>
+        <div class="kpi"><span class="l">total open value (net)</span><span class="v brass">${fmt$(tot)}</span></div>
+        <div class="kpi"><span class="l">settled value (lifetime)</span><span class="v green">${fmt$(settledVal)}</span></div>
+        <div class="kpi"><span class="l">settled cases</span><span class="v">${settled}</span></div>
+      </div>
+      <div class="card"><h3>Limitation urgency</h3>
+        <div class="kpi"><span class="l">overdue</span><span class="v ${overdue?'red':''}">${overdue}</span></div>
+        <div class="kpi"><span class="l">&le; 30 days</span><span class="v ${r30?'red':''}">${r30}</span></div>
+        <div class="kpi"><span class="l">&le; 90 days</span><span class="v ${r90?'amber':''}">${r90}</span></div>
+      </div>
+      <div class="card"><h3>By case type</h3>
+        ${CASE_TYPES.map(t=>{const n=CASES.filter(c=>c.type===t.k).length;return n?`<div class="kpi"><span class="l">${t.n}</span><span class="v">${n}</span></div>`:''}).join('')}
+      </div>
+      <div class="card"><h3>By status</h3>
+        ${['intake','active','settled','discontinued','won','lost'].map(s=>{const n=CASES.filter(c=>c.status===s).length;return n?`<div class="kpi"><span class="l">${s}</span><span class="v">${n}</span></div>`:''}).join('')}
+      </div>
+    </div>
+    ${CASES.length===0?`<div class="card" style="margin-top:14px;text-align:center;padding:30px"><h3>No cases yet</h3><p style="color:var(--cream-dim);margin:10px 0">Click <strong>+ new case</strong> to start. A demo RTA case can be seeded for valuation testing.</p><button class="btn primary" onclick="seedDemo()">seed demo case</button></div>`:''}
+  `;
+}
+function renderCaseDetail(v){
+  if(!activeCase){v.innerHTML='<div class="empty-state">no case selected</div>';return}
+  const c=activeCase;const ct=CASE_TYPES.find(x=>x.k===c.type);const u=caseUrgency(c);
+  const q=calcQuantum(c);const handler=ADVISERS.find(a=>a.id===c.responsibleHandlerId);
+  v.innerHTML=`
+    <div class="section-h">
+      <div>
+        <h2>${c.ref} &middot; ${c.claimantName||'(no claimant)'} <span style="color:var(--cream-muted);font-weight:400">v ${c.defendantName||'—'}</span></h2>
+        <div class="sub">${ct?ct.n:c.type} &middot; ${c.status} &middot; handler ${handler?handler.name:'—'} &middot; est ${fmt$(q.net)}</div>
+      </div>
+      <div class="actions">
+        <button class="btn ghost sm" onclick="deleteCase()">delete</button>
+        <button class="btn ghost sm" onclick="duplicateCase()">duplicate</button>
+        <button class="btn primary sm" onclick="saveCase()">save</button>
+      </div>
+    </div>
+    <div class="subtabs" id="caseSubtabs">
+      ${['overview','liability','quantum','protocol','part36','fees','timeline','outcome'].map(s=>`<button class="${activeSubTab===s?'active':''}" onclick="activeSubTab='${s}';renderView()">${s}</button>`).join('')}
+    </div>
+    <div id="caseBody"></div>
+  `;
+  const body=$('#caseBody');
+  if(activeSubTab==='overview')renderOverview(body,c,u);
+  else if(activeSubTab==='liability')renderLiability(body,c);
+  else if(activeSubTab==='quantum')renderQuantum(body,c,q);
+  else if(activeSubTab==='protocol')renderProtocol(body,c);
+  else if(activeSubTab==='part36')renderPart36(body,c);
+  else if(activeSubTab==='fees')renderFees(body,c);
+  else if(activeSubTab==='timeline')renderTimeline(body,c);
+  else if(activeSubTab==='outcome')renderOutcome(body,c,q);
+}
+function renderOverview(b,c,u){
+  b.innerHTML=`<div class="grid">
+    <div class="card"><h3>Identity</h3>
+      <div class="field"><label>ref</label><input value="${c.ref}" onchange="updField('ref',this.value)"></div>
+      <div class="row"><div class="field"><label>case type</label><select onchange="updField('type',this.value);recomputeLimit()">${CASE_TYPES.map(t=>`<option value="${t.k}" ${c.type===t.k?'selected':''}>${t.n}</option>`).join('')}</select></div>
+        <div class="field"><label>status</label><select onchange="updField('status',this.value)">${['intake','active','settled','discontinued','won','lost'].map(s=>`<option value="${s}" ${c.status===s?'selected':''}>${s}</option>`).join('')}</select></div></div>
+      <div class="row"><div class="field"><label>claimant</label><input value="${c.claimantName||''}" onchange="updField('claimantName',this.value)"></div>
+        <div class="field"><label>defendant</label><input value="${c.defendantName||''}" onchange="updField('defendantName',this.value)"></div></div>
+      <div class="row"><div class="field"><label>handler</label><select onchange="updField('responsibleHandlerId',this.value)">${ADVISERS.map(a=>`<option value="${a.id}" ${c.responsibleHandlerId===a.id?'selected':''}>${a.name}</option>`).join('')}</select></div>
+        <div class="field"><label>supervising partner</label><select onchange="updField('supervisingPartnerId',this.value)">${ADVISERS.map(a=>`<option value="${a.id}" ${c.supervisingPartnerId===a.id?'selected':''}>${a.name}</option>`).join('')}</select></div></div>
+    </div>
+    <div class="card"><h3>Incident</h3>
+      <div class="row"><div class="field"><label>incident date</label><input type="date" value="${c.incidentDate||''}" onchange="updField('incidentDate',this.value);recomputeLimit()"></div>
+        <div class="field"><label>date of knowledge</label><input type="date" value="${c.dateOfKnowledge||''}" onchange="updField('dateOfKnowledge',this.value);recomputeLimit()"></div></div>
+      <div class="field"><label>location</label><input value="${c.incidentLocation||''}" onchange="updField('incidentLocation',this.value)"></div>
+      <div class="field"><label>description</label><textarea rows="3" onchange="updField('description',this.value)">${c.description||''}</textarea></div>
+    </div>
+    <div class="card"><h3>Limitation &middot; ${u.label}</h3>
+      <div class="kpi"><span class="l">limitation date</span><span class="v ${u.cls==='lim-red'?'red':u.cls==='lim-amber'?'amber':u.cls==='lim-black'?'red':''}">${fmtDate(c.limitationDate)}</span></div>
+      <div class="kpi"><span class="l">days remaining</span><span class="v ${u.cls==='lim-red'||u.cls==='lim-black'?'red':u.cls==='lim-amber'?'amber':''}">${u.days===null?'—':u.days+'d'}</span></div>
+      <div class="kpi"><span class="l">limitation rule</span><span class="v">${(CASE_TYPES.find(x=>x.k===c.type)||{}).limYrs}yr ${c.type==='clinical-neg'?'(s.11 + s.14)':'(LA 1980 s.11)'}</span></div>
+      <div class="field" style="margin-top:8px"><label>override limitation date</label><input type="date" value="${c.limitationDate||''}" onchange="updField('limitationDate',this.value)"></div>
+      <button class="btn sm ghost" onclick="recomputeLimit();renderView()">recompute from incident</button>
+    </div>
+    <div class="card"><h3>Estimated value</h3>
+      <div class="kpi"><span class="l">general damages</span><span class="v">${fmt$(calcQuantum(c).generals)}</span></div>
+      <div class="kpi"><span class="l">special damages</span><span class="v">${fmt$(calcQuantum(c).specials)}</span></div>
+      <div class="kpi"><span class="l">interest</span><span class="v">${fmt$(calcQuantum(c).interest)}</span></div>
+      <div class="kpi"><span class="l">gross</span><span class="v">${fmt$(calcQuantum(c).gross)}</span></div>
+      <div class="kpi"><span class="l">contributory ${calcQuantum(c).contrib}%</span><span class="v red">−${fmt$(calcQuantum(c).gross-calcQuantum(c).net)}</span></div>
+      <div class="kpi"><span class="l"><strong>net estimate</strong></span><span class="v brass"><strong>${fmt$(calcQuantum(c).net)}</strong></span></div>
+    </div>
+  </div>`;
+}
+function renderLiability(b,c){
+  b.innerHTML=`<div class="grid">
+    <div class="card"><h3>Liability assessment</h3>
+      <div class="row"><div class="field"><label>admitted</label><select onchange="updPath('liability.admitted',this.value==='true')"><option value="false" ${!c.liability.admitted?'selected':''}>no</option><option value="true" ${c.liability.admitted?'selected':''}>yes</option></select></div>
+        <div class="field"><label>contributory %</label><input type="number" min="0" max="100" value="${c.liability.contributoryPct||0}" onchange="updPath('liability.contributoryPct',Number(this.value))"></div></div>
+      <div class="field"><label>split / notes</label><textarea rows="3" onchange="updPath('liability.splitNotes',this.value)">${c.liability.splitNotes||''}</textarea></div>
+    </div>
+    <div class="card" style="grid-column:1/-1"><h3>Defendants <button class="btn sm" style="float:right" onclick="addDefendant()">+ add</button></h3>
+      <div class="def-row head"><span>name</span><span>insurer</span><span>policy / ref</span><span>role</span><span></span></div>
+      ${(c.liability.defendantsIdentified||[]).map((d,i)=>`<div class="def-row">
+        <input value="${d.name||''}" onchange="updDef(${i},'name',this.value)">
+        <input value="${d.insurer||''}" onchange="updDef(${i},'insurer',this.value)">
+        <input value="${d.refNumber||''}" onchange="updDef(${i},'refNumber',this.value)">
+        <input value="${d.role||''}" onchange="updDef(${i},'role',this.value)" placeholder="driver / employer / occupier">
+        <span class="x" onclick="delDef(${i})">✕</span>
+      </div>`).join('')}
+      ${(!c.liability.defendantsIdentified||!c.liability.defendantsIdentified.length)?'<div class="empty-state">no defendants yet</div>':''}
+    </div>
+  </div>`;
+}
+function renderQuantum(b,c,q){
+  const isRTA=c.type==='rta';
+  b.innerHTML=`
+    <div class="grid">
+      <div class="card"><h3>General damages (PSLA)</h3>
+        <div class="row"><div class="field"><label>body part</label><select id="qPart" onchange="renderBrackets()"><option value="">— select —</option>${[...new Set(JC_BRACKETS.map(x=>x.part))].map(p=>`<option value="${p}">${p}</option>`).join('')}</select></div>
+          <div class="field"><label>severity filter</label><input id="qSev" placeholder="e.g. moderate, severe..." oninput="renderBrackets()"></div></div>
+        <div id="brackets" style="max-height:300px;overflow:auto;margin-top:8px"></div>
+        <div class="row" style="margin-top:10px"><div class="field"><label>selected band</label><input value="${c.valuation.generalDamages.injuryBand||''}" onchange="updPath('valuation.generalDamages.injuryBand',this.value)"></div>
+          <div class="field"><label>bracket lo – hi</label><input value="${c.valuation.generalDamages.lower||0} – ${c.valuation.generalDamages.upper||0}" disabled></div></div>
+        <div class="field"><label>your assessment (PSLA)</label><input type="number" value="${c.valuation.generalDamages.assessment||0}" onchange="updPath('valuation.generalDamages.assessment',Number(this.value));renderView()"></div>
+      </div>
+      ${isRTA?`<div class="card"><h3>Whiplash tariff (CLA 2018)</h3>
+        <div style="font-size:11px;color:var(--cream-muted);margin-bottom:8px">${WHIPLASH.cite}</div>
+        ${WHIPLASH.bands.map(b=>`<div class="bracket-row" onclick="updPath('valuation.whiplashBand','${b.dur}');renderView()" style="cursor:pointer;${c.valuation.whiplashBand===b.dur?'background:var(--ink)':''}"><span class="nm">${b.dur}</span><span></span><span class="rng">PSLA ${fmt$(b.psla)}</span><span class="rng">combined ${fmt$(b.combined)}</span></div>`).join('')}
+        <div style="margin-top:8px"><button class="btn sm ghost" onclick="updPath('valuation.whiplashBand','');renderView()">clear tariff</button></div>
+      </div>`:''}
+      <div class="card"><h3>Ogden multipliers (future loss)</h3>
+        <div style="font-size:11px;color:var(--cream-muted);margin-bottom:8px">${OGDEN.note}</div>
+        <button class="btn sm" onclick="addOgden()">+ add Ogden entry</button>
+        ${(c.valuation.ogdenEntries||[]).map((o,i)=>`<div class="special-row" style="grid-template-columns:1.2fr 0.8fr 0.8fr 32px;margin-top:6px">
+          <input value="${o.label||''}" placeholder="loss type" onchange="updOgden(${i},'label',this.value)">
+          <input type="number" value="${o.multiplicand||0}" placeholder="£ / year" onchange="updOgden(${i},'multiplicand',Number(this.value));renderView()">
+          <input type="number" step="0.1" value="${o.multiplier||0}" placeholder="multiplier" onchange="updOgden(${i},'multiplier',Number(this.value));renderView()">
+          <span class="x" onclick="delOgden(${i})">✕</span>
+        </div>`).join('')}
+        <details style="margin-top:10px"><summary style="cursor:pointer;color:var(--brass);font-size:11px">multiplier reference (term to 68 / lifetime)</summary>
+          <table><thead><tr><th>age</th><th>term → 68</th><th>lifetime</th></tr></thead><tbody>
+          ${Object.keys(OGDEN.multipliersLifetime).map(a=>`<tr><td>${a}</td><td class="r">${OGDEN.multipliersLossEarnings[a]?OGDEN.multipliersLossEarnings[a].m:'—'}</td><td class="r">${OGDEN.multipliersLifetime[a].m}</td></tr>`).join('')}
+          </tbody></table>
+        </details>
+      </div>
+      <div class="card"><h3>Special damages <button class="btn sm" style="float:right" onclick="addSpecial()">+ add</button></h3>
+        <div class="special-row head"><span>category</span><span>amount</span><span>evidence / notes</span><span></span></div>
+        ${(c.valuation.specialDamages||[]).map((s,i)=>`<div class="special-row">
+          <select onchange="updSpecial(${i},'category',this.value);renderView()">${SPECIAL_CATEGORIES.map(x=>`<option value="${x.k}" ${s.category===x.k?'selected':''}>${x.n}</option>`).join('')}</select>
+          <input type="number" value="${s.amount||0}" onchange="updSpecial(${i},'amount',Number(this.value));renderView()">
+          <input value="${s.notes||''}" onchange="updSpecial(${i},'notes',this.value)" placeholder="receipt ref, period">
+          <span class="x" onclick="delSpecial(${i})">✕</span>
+        </div>`).join('')}
+        ${(!c.valuation.specialDamages||!c.valuation.specialDamages.length)?'<div class="empty-state">no specials yet</div>':''}
+      </div>
+      <div class="card"><h3>Totals &middot; ${fmtDate(c.incidentDate)}</h3>
+        <div class="kpi"><span class="l">general damages (PSLA)</span><span class="v">${fmt$(q.generals)}</span></div>
+        <div class="kpi"><span class="l">special damages (past + future)</span><span class="v">${fmt$(q.specials)}</span></div>
+        <div class="kpi"><span class="l">statutory interest (8% past specials)</span><span class="v">${fmt$(q.interest)}</span></div>
+        <div class="kpi"><span class="l">gross</span><span class="v brass">${fmt$(q.gross)}</span></div>
+        <div class="field" style="margin-top:8px"><label>contributory deduction % (override)</label><input type="number" min="0" max="100" value="${c.valuation.contributoryDeduction||c.liability.contributoryPct||0}" onchange="updPath('valuation.contributoryDeduction',Number(this.value));renderView()"></div>
+        <div class="kpi"><span class="l">deduction</span><span class="v red">−${fmt$(q.gross-q.net)}</span></div>
+        <div class="kpi"><span class="l"><strong>net estimate</strong></span><span class="v brass"><strong>${fmt$(q.net)}</strong></span></div>
+      </div>
+    </div>
+  `;
+  setTimeout(()=>{renderBrackets()},10);
+}
+function renderBrackets(){
+  const b=$('#brackets');if(!b)return;
+  const p=$('#qPart').value;const sev=$('#qSev').value.toLowerCase();
+  let rows=JC_BRACKETS.filter(x=>(!p||x.part===p)&&(!sev||x.sev.includes(sev)||x.n.toLowerCase().includes(sev)));
+  rows=rows.slice(0,40);
+  b.innerHTML=`<div class="bracket-row head"><span>injury</span><span>sev</span><span>range</span><span></span></div>`+
+    rows.map(r=>`<div class="bracket-row"><span class="nm">${r.n}</span><span class="rng">${r.sev}</span><span class="rng">${fmt$(r.lo)} – ${fmt$(r.hi)}</span><button class="btn sm" onclick="useBracket('${r.sev}','${r.n.replace(/'/g,&quot;')}',${r.lo},${r.hi})">use</button></div>`).join('');
+  if(!rows.length)b.innerHTML+='<div class="empty-state">no matching brackets</div>';
+}
+function useBracket(sev,name,lo,hi){const mid=Math.round((lo+hi)/2);
+  activeCase.valuation.generalDamages.injuryBand=name;
+  activeCase.valuation.generalDamages.lower=lo;
+  activeCase.valuation.generalDamages.upper=hi;
+  if(!activeCase.valuation.generalDamages.assessment)activeCase.valuation.generalDamages.assessment=mid;
+  activeCase.updatedAt=now();renderView();toast('bracket applied')}
+function renderProtocol(b,c){
+  const p=PROTOCOLS[c.protocol]||PROTOCOLS['pre-action-pi'];
+  const start=c.protocolStarted?new Date(c.protocolStarted).getTime():null;
+  b.innerHTML=`<div class="grid">
+    <div class="card"><h3>Protocol selection</h3>
+      <div class="field"><label>protocol</label><select onchange="updField('protocol',this.value);renderView()">${Object.keys(PROTOCOLS).map(k=>`<option value="${k}" ${c.protocol===k?'selected':''}>${PROTOCOLS[k].name}</option>`).join('')}</select></div>
+      <div class="field"><label>portal ref / CNF reference</label><input value="${c.portalRef||''}" onchange="updField('portalRef',this.value)"></div>
+      <div class="row"><div class="field"><label>protocol started</label><input type="date" value="${toDateInput(c.protocolStarted)}" onchange="updField('protocolStarted',this.value?new Date(this.value).getTime():null);renderView()"></div>
+        <div class="field"><label>letter of claim sent</label><input type="date" value="${toDateInput(c.letterOfClaimSentAt)}" onchange="updField('letterOfClaimSentAt',this.value?new Date(this.value).getTime():null)"></div></div>
+    </div>
+    <div class="card" style="grid-column:1/-1"><h3>${p.name} &middot; steps</h3>
+      ${start?p.steps.map(s=>{
+        const due=start+s.dueDays*86400000;
+        const done=c.protocolSteps[s.k];
+        const days=daysBetween(now(),due);
+        let cls='',label='due '+fmtDate(due),dueCls='';
+        if(done){cls='done';label='done '+fmtDate(done)}
+        else if(days<0){cls='overdue';label='OVERDUE '+fmtDate(due);dueCls='red'}
+        else if(days<=7){cls='active';label='due in '+days+'d ('+fmtDate(due)+')';dueCls='amber'}
+        else{label='due in '+days+'d ('+fmtDate(due)+')'}
+        return `<div class="protocol-step ${cls}">
+          <div class="nm">${s.n}</div>
+          <div class="due ${dueCls}">${label}</div>
+          <div style="margin-top:6px">${done?`<button class="btn sm ghost" onclick="toggleStep('${s.k}',null)">unmark</button>`:`<button class="btn sm" onclick="toggleStep('${s.k}',Date.now())">mark done</button>`}</div>
+        </div>`}).join(''):'<div class="empty-state">set protocol start date above to see step timeline</div>'}
+    </div>
+  </div>`;
+}
+function renderPart36(b,c){
+  b.innerHTML=`<div class="card"><h3>Part 36 register <button class="btn sm" style="float:right" onclick="addPart36()">+ log offer</button></h3>
+    <div style="font-size:11px;color:var(--cream-muted);margin-bottom:8px">CPR 36. If claimant beats own offer at trial: enhanced interest, indemnity costs, 10% damages uplift. If claimant fails to beat defendant’s offer: pays defendant’s costs from expiry.</div>
+    <div class="part36-row head"><span>from</span><span>amount</span><span>ts</span><span>expires</span><span>status</span><span></span></div>
+    ${(c.part36Offers||[]).map((o,i)=>{
+      const expDays=o.expiresAt?daysBetween(now(),new Date(o.expiresAt).getTime()):null;
+      let st='live';if(o.accepted)st='accepted';else if(o.rejected)st='rejected';else if(o.withdrawn)st='withdrawn';
+      else if(expDays!==null&&expDays<0)st='expired';
+      return `<div class="part36-row">
+        <select onchange="updPart36(${i},'from',this.value)"><option value="us" ${o.from==='us'?'selected':''}>us</option><option value="them" ${o.from==='them'?'selected':''}>them</option></select>
+        <input type="number" value="${o.amount||0}" onchange="updPart36(${i},'amount',Number(this.value))">
+        <input type="date" value="${toDateInput(o.ts)}" onchange="updPart36(${i},'ts',this.value?new Date(this.value).getTime():null)">
+        <input type="date" value="${toDateInput(o.expiresAt)}" onchange="updPart36(${i},'expiresAt',this.value?new Date(this.value).getTime():null);renderView()">
+        <select onchange="setPart36Status(${i},this.value)"><option value="live" ${st==='live'?'selected':''}>live</option><option value="accepted" ${st==='accepted'?'selected':''}>accepted</option><option value="rejected" ${st==='rejected'?'selected':''}>rejected</option><option value="withdrawn" ${st==='withdrawn'?'selected':''}>withdrawn</option><option value="expired" ${st==='expired'?'selected':''} disabled>expired</option></select>
+        <span class="x" onclick="delPart36(${i})">✕</span>
+      </div>`;
+    }).join('')}
+    ${(!c.part36Offers||!c.part36Offers.length)?'<div class="empty-state">no offers yet</div>':''}
+  </div>`;
+}
+function renderFees(b,c){
+  b.innerHTML=`<div class="grid">
+    <div class="card"><h3>Fee arrangement</h3>
+      <div class="field"><label>type</label><select onchange="updField('feeArrangement',this.value);renderView()">${['cfa','dba','hourly','fixed','legal-aid'].map(s=>`<option value="${s}" ${c.feeArrangement===s?'selected':''}>${s.toUpperCase()}</option>`).join('')}</select></div>
+      ${c.feeArrangement==='cfa'?`<div class="row"><div class="field"><label>success fee % (uplift)</label><input type="number" min="0" max="100" value="${c.cfaSuccessFeePct||0}" onchange="updField('cfaSuccessFeePct',Number(this.value));renderView()"><div class="hint">LASPO: capped 25% of damages (PI)</div></div>
+        <div class="field"><label>damages cap %</label><input type="number" min="0" max="25" value="${c.cfaCappedDamagesPct||25}" onchange="updField('cfaCappedDamagesPct',Number(this.value))"></div></div>`:''}
+      ${c.feeArrangement==='dba'?`<div class="field"><label>DBA %</label><input type="number" min="0" max="50" value="${c.dbaPct||0}" onchange="updField('dbaPct',Number(this.value));renderView()"><div class="hint">capped 50% PI / 25% in court</div></div>`:''}
+    </div>
+    <div class="card"><h3>ATE insurance</h3>
+      <div class="field"><label>insurer</label><input value="${c.ateInsurer||''}" onchange="updField('ateInsurer',this.value)"></div>
+      <div class="field"><label>premium £</label><input type="number" value="${c.atePremium||0}" onchange="updField('atePremium',Number(this.value))"></div>
+    </div>
+    <div class="card"><h3>Estimated fee yield</h3>
+      ${(()=>{const q=calcQuantum(c);let fee=0,note='';
+        if(c.feeArrangement==='cfa'){const cap=q.net*(c.cfaCappedDamagesPct||25)/100;fee=cap;note='25% damages cap (LASPO)'}
+        else if(c.feeArrangement==='dba'){fee=q.net*(c.dbaPct||0)/100;note='DBA % of damages'}
+        else{note='time/fixed basis — use fallclaimpractice for fee ledger'}
+        return `<div class="kpi"><span class="l">net damages</span><span class="v">${fmt$(q.net)}</span></div>
+        <div class="kpi"><span class="l">est fee (your share)</span><span class="v brass">${fmt$(fee)}</span></div>
+        <div class="kpi"><span class="l">net to client</span><span class="v green">${fmt$(q.net-fee)}</span></div>
+        <div style="font-size:10px;color:var(--cream-muted);margin-top:6px">${note}</div>`})()}
+    </div>
+  </div>`;
+}
+function renderTimeline(b,c){
+  b.innerHTML=`<div class="card"><h3>Timeline <button class="btn sm" style="float:right" onclick="addTimelineEvt()">+ event</button></h3>
+    ${(c.timeline||[]).slice().sort((a,b)=>b.ts-a.ts).map(e=>`<div class="timeline-evt"><span class="ts">${fmtDate(e.ts)}</span><span class="kind">${e.kind}</span><div class="nt">${e.notes||''}</div></div>`).join('')}
+    ${(!c.timeline||!c.timeline.length)?'<div class="empty-state">no events yet</div>':''}
+  </div>`;
+}
+function renderOutcome(b,c,q){
+  b.innerHTML=`<div class="grid">
+    <div class="card"><h3>Outcome</h3>
+      <div class="field"><label>status</label><select onchange="updField('status',this.value);if(this.value==='settled'&&!activeCase.settledAt){updField('settledAt',Date.now())}renderView()">${['intake','active','settled','discontinued','won','lost'].map(s=>`<option value="${s}" ${c.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div class="field"><label>outcome notes</label><textarea rows="3" onchange="updField('outcome',this.value)">${c.outcome||''}</textarea></div>
+    </div>
+    <div class="card"><h3>Settlement / award</h3>
+      <div class="field"><label>settlement amount £</label><input type="number" value="${c.settlementAmount||0}" onchange="updField('settlementAmount',Number(this.value))"></div>
+      <div class="row"><div class="field"><label>settled at</label><input type="date" value="${toDateInput(c.settledAt)}" onchange="updField('settledAt',this.value?new Date(this.value).getTime():null)"></div>
+        <div class="field"><label>payment received</label><input type="date" value="${toDateInput(c.paymentReceivedAt)}" onchange="updField('paymentReceivedAt',this.value?new Date(this.value).getTime():null)"></div></div>
+      <div class="kpi" style="margin-top:8px"><span class="l">vs estimated net</span><span class="v ${(c.settlementAmount||0)>=q.net?'green':'amber'}">${q.net?Math.round((c.settlementAmount||0)/q.net*100):0}%</span></div>
+      <button class="btn primary sm" style="margin-top:10px" onclick="markSettled()">finalise &amp; broadcast</button>
+    </div>
+  </div>`;
+}
+function renderCorpus(v){
+  v.innerHTML=`
+    <div class="section-h"><div><h2>Quantum corpus</h2><div class="sub">Judicial College Guidelines (17th-ed-equivalent) &middot; ${JC_BRACKETS.length} brackets &middot; CLA 2018 whiplash tariff &middot; Ogden</div></div></div>
+    <div class="disclaimer"><strong>Research aid only.</strong> Verify all brackets against the current published JC Guidelines and Civil Liability Act 2018 / Whiplash Injury Regulations 2021. Brackets refresh on ~3-year cadence; the figures here may differ from the live edition by inflation or restructuring.</div>
+    <div class="grid">
+      <div class="card"><h3>${WHIPLASH.n}</h3><div style="font-size:11px;color:var(--cream-muted);margin-bottom:8px">${WHIPLASH.cite}</div>
+        <table><thead><tr><th>duration</th><th class="r">PSLA</th><th class="r">combined (+ minor psych)</th></tr></thead><tbody>
+        ${WHIPLASH.bands.map(b=>`<tr><td>${b.dur}</td><td class="r">${fmt$(b.psla)}</td><td class="r">${fmt$(b.combined)}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+      <div class="card" style="grid-column:1/-1"><h3>JC PSLA brackets <span class="meta">${JC_BRACKETS.length} rows</span></h3>
+        <input id="corpusSearch" placeholder="filter · e.g. brain, moderate, ankle..." oninput="renderCorpusBrackets()" style="margin-bottom:10px">
+        <div id="corpusList"></div>
+      </div>
+      <div class="card" style="grid-column:1/-1"><h3>Ogden multipliers (reference)</h3>
+        <div style="font-size:11px;color:var(--cream-muted);margin-bottom:8px">${OGDEN.note}</div>
+        <table><thead><tr><th>age</th><th class="r">term → 68 (loss of earnings)</th><th class="r">whole life</th></tr></thead><tbody>
+        ${Object.keys(OGDEN.multipliersLifetime).map(a=>`<tr><td>${a}</td><td class="r">${OGDEN.multipliersLossEarnings[a]?OGDEN.multipliersLossEarnings[a].m:'—'}</td><td class="r">${OGDEN.multipliersLifetime[a].m}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+    </div>
+  `;
+  renderCorpusBrackets();
+}
+function renderCorpusBrackets(){
+  const l=$('#corpusList');if(!l)return;
+  const q=($('#corpusSearch')?.value||'').toLowerCase();
+  const rows=JC_BRACKETS.filter(r=>!q||(r.part+' '+r.sev+' '+r.n).toLowerCase().includes(q));
+  l.innerHTML=`<table><thead><tr><th>part</th><th>severity</th><th>injury</th><th class="r">lower</th><th class="r">upper</th></tr></thead><tbody>
+  ${rows.map(r=>`<tr><td>${r.part}</td><td>${r.sev}</td><td>${r.n}</td><td class="r">${fmt$(r.lo)}</td><td class="r">${fmt$(r.hi)}</td></tr>`).join('')}
+  </tbody></table>`;
+}
+function renderAdvisers(v){
+  v.innerHTML=`
+    <div class="section-h"><div><h2>Advisers &middot; firm</h2><div class="sub">${FIRM.name} &middot; ${FIRM.regulatorType==='cmr'?'FCA CMR':'SRA'} &middot; ref ${FIRM.regulatorRef||'—'}</div></div>
+      <div class="actions"><button class="btn ghost sm" onclick="editFirm()">edit firm</button><button class="btn primary sm" onclick="addAdviser()">+ adviser</button></div></div>
+    <div class="grid">
+      <div class="card"><h3>Firm</h3>
+        <div class="kpi"><span class="l">name</span><span class="v">${FIRM.name||'—'}</span></div>
+        <div class="kpi"><span class="l">regulator</span><span class="v">${FIRM.regulatorType==='cmr'?'FCA CMR':'SRA solicitor'}</span></div>
+        <div class="kpi"><span class="l">regulator ref</span><span class="v">${FIRM.regulatorRef||'—'}</span></div>
+        <div class="kpi"><span class="l">AML supervisor</span><span class="v">${FIRM.amlSupervisor||'—'}</span></div>
+        <div class="kpi"><span class="l">PI insurer</span><span class="v">${FIRM.piInsurer||'—'} ${FIRM.piPolicyNo?'· '+FIRM.piPolicyNo:''}</span></div>
+        <div class="kpi"><span class="l">ATE insurer</span><span class="v">${FIRM.ateInsurer||'—'}</span></div>
+      </div>
+      <div class="card" style="grid-column:1/-1"><h3>Advisers (${ADVISERS.length})</h3>
+        <table><thead><tr><th>name</th><th>role</th><th>cmr / sra ref</th><th>status</th><th>cases</th><th></th></tr></thead><tbody>
+        ${ADVISERS.map(a=>{const n=CASES.filter(c=>c.responsibleHandlerId===a.id).length;return `<tr><td>${a.name}</td><td>${a.role||'—'}</td><td>${a.cmrAuthRef||'—'}</td><td>${a.status||'active'}</td><td>${n}</td><td><button class="btn sm ghost" onclick="editAdviser('${a.id}')">edit</button></td></tr>`}).join('')}
+        </tbody></table>
+      </div>
+    </div>
+  `;
+}
+function renderAudit(v){
+  v.innerHTML=`<div class="section-h"><div><h2>Audit chain</h2><div class="sub">${AUDIT.length} entries &middot; SHA-256 hash chain &middot; FCA CMR 6-year retention</div></div>
+    <div class="actions"><button class="btn ghost sm" onclick="exportAudit()">export audit</button></div></div>
+    <div class="card"><table><thead><tr><th>#</th><th>ts</th><th>action</th><th>reasoning</th><th>case</th></tr></thead><tbody>
+    ${AUDIT.slice().reverse().slice(0,200).map(e=>`<tr><td>${e.i}</td><td>${new Date(e.ts).toLocaleString('en-GB')}</td><td>${e.action}</td><td>${e.reasoning||''}</td><td>${e.caseId||''}</td></tr>`).join('')}
+    </tbody></table></div>`;
+}
+function renderOnboard(){
+  const v=$('#view');
+  v.innerHTML=`<div class="onboard">
+    <div class="step">step 1 of 2 &middot; firm</div>
+    <h1>Welcome to FallClaim</h1>
+    <p class="lead">Sovereign case management for UK claims firms. Data lives in your browser. Let’s set up your firm and first adviser.</p>
+    <div class="disclaimer">${DISCLAIMER}</div>
+    <div class="field"><label>firm name</label><input id="oFirmName" placeholder="Acme Claims Ltd"></div>
+    <div class="row"><div class="field"><label>regulator type</label><select id="oRegType"><option value="cmr">FCA CMR (claims management)</option><option value="sra">SRA solicitor practice</option></select></div>
+      <div class="field"><label>CMR firm ref / SRA roll</label><input id="oRegRef" placeholder="FRN 123456"></div></div>
+    <div class="row"><div class="field"><label>AML supervisor</label><input id="oAML" placeholder="FCA / SRA / HMRC"></div>
+      <div class="field"><label>PI insurer</label><input id="oPI" placeholder="e.g. AmTrust"></div></div>
+    <div class="row"><div class="field"><label>PI policy number</label><input id="oPIPol"></div>
+      <div class="field"><label>ATE insurer</label><input id="oATE" placeholder="e.g. ARAG"></div></div>
+    <div style="margin-top:18px;border-top:1px solid var(--line);padding-top:14px"><div class="step">step 2 of 2 &middot; first adviser</div></div>
+    <div class="row"><div class="field"><label>adviser name</label><input id="oAdvName" placeholder="Jane Doe"></div>
+      <div class="field"><label>role</label><select id="oAdvRole"><option value="caseworker">caseworker</option><option value="paralegal">paralegal</option><option value="solicitor">solicitor</option><option value="partner">partner</option><option value="COLP-equiv">COLP-equivalent</option></select></div></div>
+    <div class="row"><div class="field"><label>CMR ref / SRA roll</label><input id="oAdvRef"></div>
+      <div class="field"><label>email</label><input id="oAdvEmail" type="email"></div></div>
+    <div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end">
+      <button class="btn ghost" onclick="seedDemoFull()">seed demo firm + case</button>
+      <button class="btn primary" onclick="completeOnboard()">complete setup</button>
+    </div>
+  </div>`;
+}
+async function completeOnboard(){
+  const name=$('#oFirmName').value.trim();if(!name){toast('firm name required');return}
+  const advName=$('#oAdvName').value.trim();if(!advName){toast('adviser name required');return}
+  const t=now();
+  FIRM={id:'fm_'+uuid(),createdAt:t,updatedAt:t,name,
+    regulatorType:$('#oRegType').value,regulatorRef:$('#oRegRef').value.trim(),
+    amlSupervisor:$('#oAML').value.trim(),piInsurer:$('#oPI').value.trim(),piPolicyNo:$('#oPIPol').value.trim(),
+    ateInsurer:$('#oATE').value.trim(),setupCompletedAt:t};
+  await txPut('firms',FIRM);broadcast('firm.updated',FIRM);
+  const adv={id:'ad_'+uuid(),firmId:FIRM.id,createdAt:t,updatedAt:t,
+    name:advName,role:$('#oAdvRole').value,cmrAuthRef:$('#oAdvRef').value.trim(),
+    email:$('#oAdvEmail').value.trim(),status:'active',startedAt:t};
+  ADVISERS.push(adv);await txPut('advisers',adv);broadcast('adviser.created',adv);
+  await audit('firm.created','First-launch onboarding',{firmId:FIRM.id});
+  await audit('adviser.created','First adviser created',{adviserId:adv.id});
+  toast('firm created');renderAll();
+}
+async function seedDemoFull(){
+  const t=now();
+  FIRM={id:'fm_'+uuid(),createdAt:t,updatedAt:t,name:'Demo Claims LLP',
+    regulatorType:'sra',regulatorRef:'SRA 000000',amlSupervisor:'SRA',
+    piInsurer:'Demo PI Co',piPolicyNo:'DEMO-PI-001',ateInsurer:'Demo ATE Co',setupCompletedAt:t};
+  await txPut('firms',FIRM);
+  const adv={id:'ad_'+uuid(),firmId:FIRM.id,createdAt:t,updatedAt:t,name:'Demo Adviser',role:'solicitor',cmrAuthRef:'demo',email:'demo@example.com',status:'active',startedAt:t};
+  ADVISERS.push(adv);await txPut('advisers',adv);
+  await seedDemo();
+  await audit('firm.demo','Demo firm seeded',{firmId:FIRM.id});
+  toast('demo seeded');renderAll();
+}
+async function seedDemo(){
+  const t=now();
+  const client={id:'cl_'+uuid(),firmId:FIRM.id,createdAt:t,updatedAt:t,archivedAt:null,
+    title:'Mr',firstName:'John',lastName:'Demo',email:'john@example.com',phone:'07000000000',
+    address:{line1:'1 Demo St',city:'London',postcode:'EC1A 1AA',country:'GB'},
+    cooling:{offDate:new Date(t+14*86400000).toISOString().slice(0,10),waived:false},
+    referralSource:'direct',referralFee:0,adviserId:ADVISERS[0].id,notes:[]};
+  CLIENTS.push(client);await txPut('clients',client);
+  const c=newCaseRec();c.clientId=client.id;c.ref='C-'+new Date().getFullYear()+'-DEMO';
+  c.claimantName='John Demo';c.defendantName='Acme Driver Ltd';c.type='rta';
+  const incidentDays=120;c.incidentDate=new Date(t-incidentDays*86400000).toISOString().slice(0,10);
+  c.incidentLocation='A1 northbound, Junction 5';
+  c.description='DEMO · RTA quantum · overwrite me. Rear-shunt at traffic lights, claimant whiplash + back strain, 9-month recovery.';
+  c.protocol='rta-portal';c.protocolStarted=t-90*86400000;c.protocolSteps={cnf:t-85*86400000,ack:t-84*86400000};
+  c.letterOfClaimSentAt=t-80*86400000;c.status='active';
+  c.liability={admitted:true,contributoryPct:0,splitNotes:'Defendant insurer admitted liability via portal.',
+    defendantsIdentified:[{name:'Acme Driver Ltd',insurer:'Demo Insurance',refNumber:'POL-DEMO-2025',role:'driver'}]};
+  c.valuation.whiplashBand='≤ 9 months';
+  c.valuation.generalDamages={injuryBand:'Minor back (full recovery within 5yr)',lower:2890,upper:14070,assessment:5000};
+  c.valuation.specialDamages=[
+    {category:'medical-expenses',amount:850,notes:'GP + physio receipts'},
+    {category:'lost-earnings',amount:2400,notes:'4 weeks off work'},
+    {category:'travel',amount:180,notes:'taxis to physio'},
+    {category:'damaged-property',amount:380,notes:'vehicle excess + jacket'}
+  ];
+  c.feeArrangement='cfa';c.cfaSuccessFeePct=100;c.cfaCappedDamagesPct=25;
+  c.timeline=[
+    {ts:t-100*86400000,kind:'instruction',notes:'Client instructed by referral.'},
+    {ts:t-95*86400000,kind:'letter-sent',notes:'CNF submitted via MOJ RTA portal.'},
+    {ts:t-84*86400000,kind:'response',notes:'Liability admitted via portal acknowledgement.'}
+  ];
+  c.responsibleHandlerId=ADVISERS[0].id;c.supervisingPartnerId=ADVISERS[0].id;
+  c.limitationDate=calcLimitation(c);
+  CASES.push(c);await txPut('cases',c);broadcast('case.created',c);
+  await audit('case.created','Demo case seeded for valuation testing',{caseId:c.id,adviserId:ADVISERS[0].id});
+}
+function newCase(){if(!FIRM){toast('complete onboarding first');return}
+  const c=newCaseRec();c.limitationDate=calcLimitation(c);
+  CASES.push(c);txPut('cases',c);broadcast('case.created',c);
+  audit('case.created','New case created',{caseId:c.id});
+  activeCase=c;activeView='case';activeSubTab='overview';renderAll();
+}
+function updField(k,v){if(!activeCase)return;activeCase[k]=v;activeCase.updatedAt=now();
+  txPut('cases',activeCase);broadcast('case.updated',activeCase);renderTabs();renderSidebar();}
+function updPath(p,v){if(!activeCase)return;const ks=p.split('.');let o=activeCase;
+  for(let i=0;i<ks.length-1;i++){if(!o[ks[i]])o[ks[i]]={};o=o[ks[i]]}
+  o[ks[ks.length-1]]=v;activeCase.updatedAt=now();
+  txPut('cases',activeCase);broadcast('case.updated',activeCase);}
+function recomputeLimit(){if(!activeCase)return;activeCase.limitationDate=calcLimitation(activeCase);
+  activeCase.updatedAt=now();txPut('cases',activeCase);broadcast('case.updated',activeCase);renderTabs();renderSidebar();}
+async function saveCase(){if(!activeCase)return;activeCase.updatedAt=now();
+  await txPut('cases',activeCase);broadcast('case.updated',activeCase);
+  await audit('case.updated','Manual save',{caseId:activeCase.id});toast('saved');renderAll();}
+async function deleteCase(){if(!activeCase)return;if(!confirm('Delete this case?'))return;
+  await txDel('cases',activeCase.id);await audit('case.deleted','Manual delete',{caseId:activeCase.id});
+  CASES=CASES.filter(c=>c.id!==activeCase.id);activeCase=null;activeView='cases';renderAll();toast('deleted');}
+function duplicateCase(){if(!activeCase)return;const c=JSON.parse(JSON.stringify(activeCase));
+  c.id='cs_'+uuid();c.ref=activeCase.ref+'-copy';c.ts=now();c.updatedAt=now();c.status='intake';
+  CASES.push(c);txPut('cases',c);broadcast('case.created',c);activeCase=c;renderAll();toast('duplicated');}
+function addDefendant(){if(!activeCase)return;if(!activeCase.liability.defendantsIdentified)activeCase.liability.defendantsIdentified=[];
+  activeCase.liability.defendantsIdentified.push({name:'',insurer:'',refNumber:'',role:''});
+  updField('updatedAt',now());renderView();}
+function updDef(i,k,v){activeCase.liability.defendantsIdentified[i][k]=v;updField('updatedAt',now())}
+function delDef(i){activeCase.liability.defendantsIdentified.splice(i,1);updField('updatedAt',now());renderView()}
+function addSpecial(){if(!activeCase.valuation.specialDamages)activeCase.valuation.specialDamages=[];
+  activeCase.valuation.specialDamages.push({category:'medical-expenses',amount:0,notes:''});updField('updatedAt',now());renderView()}
+function updSpecial(i,k,v){activeCase.valuation.specialDamages[i][k]=v;updField('updatedAt',now())}
+function delSpecial(i){activeCase.valuation.specialDamages.splice(i,1);updField('updatedAt',now());renderView()}
+function addOgden(){if(!activeCase.valuation.ogdenEntries)activeCase.valuation.ogdenEntries=[];
+  activeCase.valuation.ogdenEntries.push({label:'Future loss of earnings',multiplicand:0,multiplier:0});updField('updatedAt',now());renderView()}
+function updOgden(i,k,v){activeCase.valuation.ogdenEntries[i][k]=v;updField('updatedAt',now())}
+function delOgden(i){activeCase.valuation.ogdenEntries.splice(i,1);updField('updatedAt',now());renderView()}
+function toggleStep(k,v){if(!activeCase.protocolSteps)activeCase.protocolSteps={};
+  if(v===null)delete activeCase.protocolSteps[k];else activeCase.protocolSteps[k]=v;
+  updField('updatedAt',now());renderView()}
+function addPart36(){if(!activeCase.part36Offers)activeCase.part36Offers=[];
+  activeCase.part36Offers.push({ts:now(),from:'us',amount:0,expiresAt:now()+21*86400000,accepted:false,rejected:false,withdrawn:false});
+  updField('updatedAt',now());broadcast('part36.recorded',{caseId:activeCase.id,offer:activeCase.part36Offers[activeCase.part36Offers.length-1]});
+  audit('part36.recorded','Offer logged',{caseId:activeCase.id});renderView()}
+function updPart36(i,k,v){activeCase.part36Offers[i][k]=v;updField('updatedAt',now());broadcast('part36.recorded',{caseId:activeCase.id,offer:activeCase.part36Offers[i]})}
+function setPart36Status(i,s){const o=activeCase.part36Offers[i];o.accepted=s==='accepted';o.rejected=s==='rejected';o.withdrawn=s==='withdrawn';updField('updatedAt',now());renderView()}
+function delPart36(i){activeCase.part36Offers.splice(i,1);updField('updatedAt',now());renderView()}
+function addTimelineEvt(){const kind=prompt('event kind (instruction/letter-sent/response/offer/court-hearing/settlement)','letter-sent');if(!kind)return;
+  const notes=prompt('notes','');
+  activeCase.timeline.push({ts:now(),kind,notes:notes||''});updField('updatedAt',now());audit('timeline.added',kind,{caseId:activeCase.id});renderView()}
+async function markSettled(){if(!activeCase)return;activeCase.status='settled';
+  if(!activeCase.settledAt)activeCase.settledAt=now();
+  activeCase.updatedAt=now();await txPut('cases',activeCase);
+  broadcast('case.settled',activeCase);await audit('case.settled','Case marked settled',{caseId:activeCase.id});
+  toast('settled · broadcast');renderAll();}
+function addAdviser(){const name=prompt('adviser name');if(!name)return;
+  const role=prompt('role (caseworker/paralegal/solicitor/partner/COLP-equiv)','caseworker')||'caseworker';
+  const ref=prompt('CMR / SRA ref','')||'';
+  const t=now();const adv={id:'ad_'+uuid(),firmId:FIRM.id,createdAt:t,updatedAt:t,name,role,cmrAuthRef:ref,status:'active',startedAt:t};
+  ADVISERS.push(adv);txPut('advisers',adv);broadcast('adviser.created',adv);
+  audit('adviser.created',name,{adviserId:adv.id});renderAll();toast('adviser added');}
+function editAdviser(id){const a=ADVISERS.find(x=>x.id===id);if(!a)return;
+  const name=prompt('name',a.name);if(name===null)return;a.name=name||a.name;
+  const role=prompt('role',a.role);if(role!==null)a.role=role;
+  a.updatedAt=now();txPut('advisers',a);broadcast('adviser.updated',a);renderAll();toast('updated');}
+function editFirm(){const n=prompt('firm name',FIRM.name);if(n===null)return;FIRM.name=n||FIRM.name;
+  const ref=prompt('regulator ref',FIRM.regulatorRef||'');if(ref!==null)FIRM.regulatorRef=ref;
+  FIRM.updatedAt=now();txPut('firms',FIRM);broadcast('firm.updated',FIRM);renderAll();toast('updated');}
+function exportJSON(){const data={firm:FIRM,advisers:ADVISERS,clients:CLIENTS,cases:CASES,audit:AUDIT,exportedAt:now(),tool:TOOLNAME,version:VERSION};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='fallclaim-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(u);toast('exported')}
+function exportAudit(){const blob=new Blob([JSON.stringify(AUDIT,null,2)],{type:'application/json'});
+  const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='fallclaim-audit-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(u);toast('exported')}
+function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{try{const d=JSON.parse(ev.target.result);
+  if(d.firm){FIRM=d.firm;await txPut('firms',FIRM)}
+  for(const a of d.advisers||[]){await txPut('advisers',a)}
+  for(const c of d.clients||[]){await txPut('clients',c)}
+  for(const c of d.cases||[]){await txPut('cases',c)}
+  for(const a of d.audit||[]){await txPut('audit',a)}
+  await loadAll();renderAll();toast('imported '+(d.cases?.length||0)+' cases')
+}catch(err){toast('import failed: '+err.message)}};r.readAsText(f)}
+function openPalette(){$('#palette').classList.add('open');setTimeout(()=>$('#pInput').focus(),50);$('#pInput').value='';renderPalette('')}
+function closePalette(){$('#palette').classList.remove('open')}
+function renderPalette(q){const body=$('#pBody');q=(q||'').toLowerCase().trim();
+  let rules=T0_RULES;
+  if(q){rules=T0_RULES.filter(r=>r.q.includes(q)||r.a.toLowerCase().includes(q));
+    if(!rules.length){rules=[{q:'no match',a:'No T0 rule matched. Try keywords: limitation, whiplash, part 36, Bolitho, MOJ portal, JC, Ogden, CFA, DBA, ATE, FCA CMR, FOS, fundamental dishonesty. Or BYOK Anthropic/OpenAI in Settings for T3 free-form.'}]}}
+  body.innerHTML=rules.slice(0,30).map(r=>`<div class="palette-row" onclick="answerPaste('${r.q.replace(/'/g,&quot;')}')"><div class="q">${r.q}</div><div class="a">${r.a}</div></div>`).join('');
+}
+function answerPaste(q){const r=T0_RULES.find(x=>x.q===q);if(r){$('#pInput').value=q;renderPalette(q);toast('answer above')}}
+function openModal(k){$('#modal').classList.add('open');const t=$('#modalTitle'),b=$('#modalBody');
+  if(k==='settings'){t.textContent='Settings';
+    b.innerHTML=`<div class="field"><label>tier</label><select id="setTier"><option value="T0" ${SETTINGS.tier==='T0'?'selected':''}>T0 · offline rules</option><option value="T3" ${SETTINGS.tier==='T3'?'selected':''}>T3 · BYOK live LLM</option></select></div>
+    <div class="field"><label>Anthropic API key (sk-ant-...)</label><input id="setAnthropic" type="password" value="${SETTINGS.anthropicKey||''}"></div>
+    <div class="field"><label>OpenAI API key (sk-...)</label><input id="setOpenAI" type="password" value="${SETTINGS.openaiKey||''}"></div>
+    <div style="margin-top:14px;padding:12px;background:var(--ink);border-radius:3px;font-size:11px;color:var(--cream-dim)">
+      <strong style="color:var(--brass)">${TOOLNAME} v${VERSION}</strong> &middot; prime ${PRIME} &middot; ${CASES.length} cases &middot; ${AUDIT.length} audit entries<br>
+      Channel: <code>fall-claim</code>, <code>fall-signal</code> &middot; IDB: 7 stores &middot; ${JC_BRACKETS.length} JC brackets &middot; ${T0_RULES.length} T0 rules<br>
+      <a href="#" onclick="event.preventDefault();if(confirm('Wipe ALL data?')){indexedDB.deleteDatabase('${STORE}').onsuccess=()=>location.reload()}">factory reset</a>
+    </div>
+    <div class="actions"><button class="btn" onclick="closeModal()">cancel</button><button class="btn primary" onclick="saveSettings()">save</button></div>`}
+}
+function closeModal(){$('#modal').classList.remove('open')}
+async function saveSettings(){SETTINGS.tier=$('#setTier').value;SETTINGS.anthropicKey=$('#setAnthropic').value;SETTINGS.openaiKey=$('#setOpenAI').value;
+  SETTINGS.id='_main';await txPut('settings',SETTINGS);closeModal();renderTabs();toast('saved')}
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();openPalette()}
+  if(e.key==='Escape'){closePalette();closeModal()}});
+$('#palette').addEventListener('click',e=>{if(e.target.id==='palette')closePalette()});
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+$('#pInput').addEventListener('input',e=>renderPalette(e.target.value));
+window.fallclaim={get FIRM(){return FIRM},get CASES(){return CASES},get ADVISERS(){return ADVISERS},get AUDIT(){return AUDIT},
+  JC_BRACKETS,WHIPLASH,OGDEN,T0_RULES,PROTOCOLS,CASE_TYPES,calcQuantum,calcLimitation,VERSION,PRIME};
+window.konomi={tool:TOOLNAME,version:VERSION,prime:PRIME,channels:['fall-claim','fall-signal']};
+(async function(){
+  try{await openDB();await loadAll();meshInit();boot=true;renderAll();
+    console.log('[fallclaim] v'+VERSION+' · prime '+PRIME+' · '+CASES.length+' cases · '+JC_BRACKETS.length+' brackets · '+T0_RULES.length+' T0 rules');
+  }catch(e){console.error(e);document.body.innerHTML='<div style="padding:30px;color:#e6e1d6;font-family:Georgia,serif">FallClaim failed to boot: '+e.message+'</div>'}
+})();
+</script>
+</body>
+</html>

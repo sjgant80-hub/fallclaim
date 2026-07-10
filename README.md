@@ -72,8 +72,8 @@ The corpus is a research aid, not a substitute for the current published Guideli
 
 | Case type | Protocol | Key windows |
 |---|---|---|
-| RTA (£1k–£25k) | MOJ RTA portal | CNF → 15 working days liability response → settlement window → court |
-| EL/PL (£1k–£25k) | MOJ EL/PL portal | CNF → 30 days liability response |
+| RTA (TBA) | MOJ RTA portal | CNF → 15 working days liability response → settlement window → court |
+| EL/PL (TBA) | MOJ EL/PL portal | CNF → 30 days liability response |
 | PI (general) | Pre-action PI protocol | Letter of Claim → 21 days acknowledgment → 3 months substantive response |
 | Clinical neg | Pre-action clinical neg protocol | Letter of Notification → Letter of Claim → 4 months response |
 | Housing disrepair | Housing Conditions protocol | Letter of Claim → 20 working days response → expert inspection |

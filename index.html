@@ -217,22 +217,19 @@ tr.total td.r{color:var(--brass)}
     'llama-3b':  { id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',   size: '~2GB',   label: '3B · balanced · default · most laptops' },
     'qwen-7b':   { id: 'Qwen2.5-7B-Instruct-q4f16_1-MLC',     size: '~5GB',   label: '7B · capable · needs decent GPU (M-series Mac / 8GB+ VRAM)' },
     'llama-8b':  { id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',   size: '~5GB',   label: '8B · common · needs decent GPU' },
-    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' },
-  };
+    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' }};
   const DEFAULT_MODEL = 'llama-3b';
 
   const T3_PROVIDERS = {
     anthropic: { label: 'Anthropic Claude', models: ['claude-sonnet-4-5','claude-opus-4-7','claude-haiku-4-5'], default: 'claude-sonnet-4-5', url: 'https://api.anthropic.com/v1/messages' },
     openai:    { label: 'OpenAI',           models: ['gpt-4o','gpt-4o-mini','o1-mini'],                          default: 'gpt-4o-mini',      url: 'https://api.openai.com/v1/chat/completions' },
-    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' },
-  };
+    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' }};
 
   // ─── State ───────────────────────────────────────────────────────
   const STATE = {
     config: loadConfig(),
     ai: { ready: false, loading: false, progress: 0, engine: null, model: null },
-    mesh: { active: false, peers: new Map(), bc: null, signal: null },
-  };
+    mesh: { active: false, peers: new Map(), bc: null, signal: null }};
 
   function loadConfig() {
     try { return JSON.parse(localStorage.getItem('fall-kit.config') || '{}'); }
@@ -299,8 +296,7 @@ tr.total td.r{color:var(--brass)}
     if (tier === 'T2' && STATE.ai.ready && STATE.ai.engine) {
       const r = await STATE.ai.engine.chat.completions.create({
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMsg }],
-        max_tokens: maxTokens,
-      });
+        max_tokens: maxTokens});
       return r.choices[0].message.content;
     }
     if (tier === 'T3' && STATE.config.api_key && STATE.config.api_provider) {
@@ -317,8 +313,7 @@ tr.total td.r{color:var(--brass)}
       const r = await fetch(T3_PROVIDERS.anthropic.url, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] }),
-      });
+        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] })});
       if (!r.ok) throw new Error('Anthropic ' + r.status + ': ' + (await r.text()).slice(0, 200));
       const j = await r.json();
       return j.content[0].text;
@@ -327,8 +322,7 @@ tr.total td.r{color:var(--brass)}
       const r = await fetch(T3_PROVIDERS.openai.url, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
-        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] }),
-      });
+        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] })});
       if (!r.ok) throw new Error('OpenAI ' + r.status);
       const j = await r.json();
       return j.choices[0].message.content;
@@ -337,8 +331,7 @@ tr.total td.r{color:var(--brass)}
       const r = await fetch(T3_PROVIDERS.google.url + model + ':generateContent?key=' + encodeURIComponent(key), {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } }),
-      });
+        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } })});
       if (!r.ok) throw new Error('Google ' + r.status);
       const j = await r.json();
       return j.candidates[0].content.parts[0].text;
@@ -579,8 +572,7 @@ tr.total td.r{color:var(--brass)}
     openMint: openMint,  // v1.2 · launch kcc-mint with this seed prefilled as parent
     MODELS: WEBLLM_MODELS,
     PROVIDERS: T3_PROVIDERS,
-    state: STATE,
-  };
+    state: STATE};
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -851,9 +843,9 @@ const STATUTORY_INTEREST=0.08;
 const T0_RULES=[
   {q:'pi limitation',a:'PI claims: 3 years from incident or date of knowledge (Limitation Act 1980 s.11). Court has discretion under s.33 to disapply where equitable.'},
   {q:'date of knowledge',a:'Date when claimant first knew (a) injury was significant, (b) attributable to defendant’s act/omission, (c) identity of defendant. See s.14 Limitation Act 1980.'},
-  {q:'civil liability act 2018',a:'Fixes whiplash PSLA tariff for RTAs with injuries lasting ≤ 2 years. Bands range from £240 (≤3mo) to £4,215 (≤24mo). Higher tariff if minor psych injury also.'},
-  {q:'whiplash tariff',a:'CLA 2018 tariff: 3mo £240 / 6mo £495 / 9mo £840 / 12mo £1,320 / 15mo £2,040 / 18mo £3,005 / 24mo £4,215. Combined (with psych) slightly higher.'},
-  {q:'moj portal',a:'RTA portal: PI £1,000–£25,000. EL/PL portal: £1,000–£25,000. Fixed recoverable costs apply. 3-stage process (CNF → settlement pack → court).'},
+  {q:'civil liability act 2018',a:'Fixes whiplash PSLA tariff for RTAs with injuries lasting ≤ 2 years. Bands range from TBA (≤3mo) to TBA (≤24mo). Higher tariff if minor psych injury also.'},
+  {q:'whiplash tariff',a:'CLA 2018 tariff: 3mo TBA / 6mo TBA / 9mo TBA / 12mo TBA / 15mo TBA / 18mo TBA / 24mo TBA. Combined (with psych) slightly higher.'},
+  {q:'moj portal',a:'RTA portal: PI TBA–TBA. EL/PL portal: TBA–TBA. Fixed recoverable costs apply. 3-stage process (CNF → settlement pack → court).'},
   {q:'jc guidelines',a:'Judicial College Guidelines, 17th edition (2024). Refreshed every ~3 years. Used by courts to assess PSLA general damages. Always verify against current edition.'},
   {q:'ogden tables',a:'Government Actuary’s tables for calculating future loss (earnings, care, services). Multiplier × multiplicand = lump sum. Current discount rate −0.25% (E&W).'},
   {q:'contributory negligence',a:'Law Reform (Contributory Negligence) Act 1945 s.1 — damages reduced by claimant’s share of fault. Common splits: 25% seat-belt, 15% no helmet, 20% drunk passenger.'},
@@ -867,13 +859,13 @@ const T0_RULES=[
   {q:'cfa success fee',a:'Post-LASPO (April 2013): success fee not recoverable from defendant. Capped at 25% of general damages + past losses (not future). Client pays from damages.'},
   {q:'dba',a:'Damages Based Agreement — contingency fee. Capped 50% damages (25% in PI court cases, 35% in employment). DBA Regs 2013. Recent reform proposals (Mulheron) widely awaited.'},
   {q:'ate insurance',a:'After-the-Event insurance for adverse costs + disbursements. Premiums no longer recoverable from defendant (LASPO). Exception: clinical negligence expert report premium.'},
-  {q:'fixed costs',a:'Extended FRC regime (Oct 2023) applies to most claims up to £100,000 + simple claims up to £25,000. Bands by complexity (Bands 1-4). Mesothelioma and clinical neg excluded.'},
+  {q:'fixed costs',a:'Extended FRC regime (Oct 2023) applies to most claims up to TBA + simple claims up to TBA. Bands by complexity (Bands 1-4). Mesothelioma and clinical neg excluded.'},
   {q:'fca cmr',a:'FCA Claims Management Regulation since April 2019. Replaced MoJ CMR. Cooling-off 14 days. Fee disclosure required. Complaints handling → FOS. Auth ref: FCA Register.'},
   {q:'cooling off',a:'CMR firms: 14-day cooling-off period from agreement signing. Client may cancel without charge unless work was requested to start immediately (and they waived in writing).'},
   {q:'fos',a:'Financial Ombudsman Service handles complaints against FCA-regulated firms (including CMCs since 2019). 6-month limit to refer after final response. Decisions binding on firm if accepted.'},
-  {q:'small claims',a:'Now £1,500 PSLA threshold for RTA (was £1,000) post Whiplash Reforms. £500 general small claims limit raised to £10,000 for non-PI / non-housing claims.'},
-  {q:'fast track',a:'Claims £25,000–£50,000 (since FRC extension, mostly intermediate track). 1 day trial limit. Fixed costs by band/stage.'},
-  {q:'multi track',a:'Over £50,000 or complex matters. Active case management, costs budgeting (Precedent H), full disclosure.'},
+  {q:'small claims',a:'Now TBA PSLA threshold for RTA (was TBA) post Whiplash Reforms. TBA general small claims limit raised to TBA for non-PI / non-housing claims.'},
+  {q:'fast track',a:'Claims TBA–TBA (since FRC extension, mostly intermediate track). 1 day trial limit. Fixed costs by band/stage.'},
+  {q:'multi track',a:'Over TBA or complex matters. Active case management, costs budgeting (Precedent H), full disclosure.'},
   {q:'qualified one way',a:'QOCS — claimant in PI claim normally protected from paying defendant’s costs unless: fundamentally dishonest, claim struck out, Part 36 offer rule applies. Set-off against own damages.'},
   {q:'fundamental dishonesty',a:'CPR 44.16 / s.57 Criminal Justice and Courts Act 2015 — claim dismissed in entirety if claimant fundamentally dishonest in material respect. Loses QOCS protection.'},
   {q:'rehabilitation code',a:'2015 Rehabilitation Code — encourages early defendant-funded rehab assessment in PI/clin neg. Without prejudice. Treatment costs recoverable if liability admitted.'}

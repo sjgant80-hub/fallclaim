@@ -1,5 +1,7 @@
 # ◊ FallClaim · sovereign case management + UK quantum engine for claims firms
 
+**Live:** [sjgant80-hub.github.io/fallclaim](https://sjgant80-hub.github.io/fallclaim/)
+
 **v1.0.0 · prime 811 · MIT · single-file**
 
 One HTML file. Multi-firm, multi-adviser, multi-client, multi-case management for UK claims firms (1–10 people) — PI, RTA, EL, PL, clinical negligence, housing disrepair, financial mis-selling, data breach, trip. Embedded Judicial College Guideline quantum corpus + Civil Liability Act 2018 whiplash tariff + Ogden multiplier tables + pre-action protocol trackers + Part 36 register + limitation calculator. Runs offline. Data never leaves the device.
